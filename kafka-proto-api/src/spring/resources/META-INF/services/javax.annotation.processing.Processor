@@ -1,0 +1,3 @@
+pcosta.kafka.spring.annotation.ErrorListenerProcessor
+pcosta.kafka.spring.annotation.MessagingListenerProcessor
+pcosta.kafka.spring.annotation.ListenerConfigurationProcessor
