@@ -70,6 +70,14 @@ public class MessagingListenerProcessorTest {
     }
 
     @Test
+    public void test_kafkaMessage_type_message() {
+        Truth.ASSERT.about(javaSource())
+                .that(forResource(getClass().getResource("/processor/MessagingListener_KafkaMessage.java")))
+                .processedWith(new MessagingListenerProcessor())
+                .compilesWithoutError();
+    }
+
+    @Test
     public void test_annotationOnInterface() {
         Truth.ASSERT.about(javaSource())
                 .that(forResource(getClass().getResource("/processor/MessagingListener_At_Interface.java")))

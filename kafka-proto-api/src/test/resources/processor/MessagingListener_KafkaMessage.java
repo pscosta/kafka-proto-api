@@ -3,7 +3,7 @@ package processor;
 import pcosta.kafka.api.MessageListener;
 import pcosta.kafka.api.MessageMetadata;
 import pcosta.kafka.spring.annotation.MessagingListener;
-import pcosta.messaging.KafkaMessageProto.KafkaMessage;
+import pcosta.kafka.message.KafkaMessageProto.KafkaMessage;
 
 /**
  * @author Pedro Costa
