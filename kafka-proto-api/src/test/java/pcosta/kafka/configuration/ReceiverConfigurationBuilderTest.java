@@ -77,7 +77,7 @@ public class ReceiverConfigurationBuilderTest {
         assertFalse(configuration.getListeners().isEmpty());
         assertEquals(2, configuration.getListeners().size());
 
-        configuration.getListeners().stream().forEach(listener -> {
+        configuration.getListeners().forEach(listener -> {
             assertEquals(-2L, listener.getOffset());
             assertEquals(0, listener.getPartition());
         });

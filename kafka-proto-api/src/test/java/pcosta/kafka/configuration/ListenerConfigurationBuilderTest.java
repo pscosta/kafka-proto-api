@@ -22,22 +22,22 @@ import static org.mockito.Mockito.*;
  */
 public class ListenerConfigurationBuilderTest {
 
-    @Test(expected = NullPointerException.class)
-    @SuppressWarnings("unchecked")
-    public void test_invalidHandler() throws Exception {
-        new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class)).addHandler((MessageListener) null);
-    }
-
     @Test
     @SuppressWarnings("unchecked")
-    public void test_addHandler_success() throws Exception {
+    public void test_addHandler_success() {
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class))
                 .addHandler(mock(MessageListener.class))
                 .addHandler(mock(MessageListener.class));
     }
 
     @Test(expected = NullPointerException.class)
-    public void test_invalidHandlers() throws Exception {
+    @SuppressWarnings("unchecked")
+    public void test_invalidHandler() {
+        new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class)).addHandler((MessageListener) null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void test_invalidHandlers() {
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class)).addHandlers(null);
     }
 
@@ -51,7 +51,7 @@ public class ListenerConfigurationBuilderTest {
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("unchecked")
-    public void test_addHandlers_fail() throws Exception {
+    public void test_addHandlers_fail() {
         final Collection<MessageListener> listeners = Collections.singletonList(mock(MessageListener.class));
         final Collection<MessageListener> listeners2 = Arrays.asList(mock(MessageListener.class), null);
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class)).addHandlers(listeners).addHandlers(listeners2);
@@ -59,7 +59,7 @@ public class ListenerConfigurationBuilderTest {
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("unchecked")
-    public void test_invalidHandlerBuild() throws Exception {
+    public void test_invalidHandlerBuild() {
         final ReceiverConfigurationBuilder receiverConfigurationBuilder = mock(ReceiverConfigurationBuilder.class);
         new ListenerConfigurationBuilder<>(receiverConfigurationBuilder)
                 .withMessageType(Message.class)
@@ -68,7 +68,7 @@ public class ListenerConfigurationBuilderTest {
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("unchecked")
-    public void test_invalidFilter() throws Exception {
+    public void test_invalidFilter() {
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class)).addFilter((MessageFilter) null);
     }
 
@@ -82,7 +82,7 @@ public class ListenerConfigurationBuilderTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void test_invalidFilters() throws Exception {
+    public void test_invalidFilters() {
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class)).addFilters(null);
     }
 
@@ -100,7 +100,7 @@ public class ListenerConfigurationBuilderTest {
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("unchecked")
-    public void test_addFilters_fail() throws Exception {
+    public void test_addFilters_fail() {
         final Collection<MessageFilter> filters = Collections.singletonList(mock(MessageFilter.class));
         final Collection<MessageFilter> filters2 = Arrays.asList(mock(MessageFilter.class), null);
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class))
@@ -117,13 +117,13 @@ public class ListenerConfigurationBuilderTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void test_invalidTopic() throws Exception {
+    public void test_invalidTopic() {
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class)).addTopics((String[]) null);
     }
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("unchecked")
-    public void test_addTopics_null() throws Exception {
+    public void test_addTopics_null() {
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class))
                 .addTopics("GoodTopic")
                 .addTopics("GoodTopic", null);
@@ -131,7 +131,7 @@ public class ListenerConfigurationBuilderTest {
 
     @Test(expected = IllegalArgumentException.class)
     @SuppressWarnings("unchecked")
-    public void test_addDuplicatedTopics_fail() throws Exception {
+    public void test_addDuplicatedTopics_fail() {
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class))
                 .addTopics("GoodTopic")
                 .addTopics("GoodTopic", "GoodTopic");
@@ -139,7 +139,7 @@ public class ListenerConfigurationBuilderTest {
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("unchecked")
-    public void test_invalidMetadataBuild() throws Exception {
+    public void test_invalidMetadataBuild() {
         final ReceiverConfigurationBuilder receiverConfigurationBuilder = mock(ReceiverConfigurationBuilder.class);
         final MessageListener listener = mock(MessageListener.class);
         new ListenerConfigurationBuilder<>(receiverConfigurationBuilder)
@@ -149,13 +149,13 @@ public class ListenerConfigurationBuilderTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void test_invalidDeserializer() throws Exception {
+    public void test_invalidDeserializer() {
         new ListenerConfigurationBuilder<>(mock(ReceiverConfigurationBuilder.class)).withMessageType(null);
     }
 
     @Test(expected = IllegalStateException.class)
     @SuppressWarnings("unchecked")
-    public void test_defineDeserializerTwice() throws Exception {
+    public void test_defineDeserializerTwice() {
         new ListenerConfigurationBuilder(mock(ReceiverConfigurationBuilder.class))
                 .withMessageType(Message.class)
                 .withMessageType(SomeMessage.class);
@@ -171,7 +171,7 @@ public class ListenerConfigurationBuilderTest {
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("unchecked")
-    public void test_invalidDeserializerBuild() throws Exception {
+    public void test_invalidDeserializerBuild() {
         final ReceiverConfigurationBuilder receiverConfigurationBuilder = mock(ReceiverConfigurationBuilder.class);
         final MessageListener listener = mock(MessageListener.class);
 

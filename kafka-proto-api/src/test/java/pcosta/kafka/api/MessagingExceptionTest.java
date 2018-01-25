@@ -14,17 +14,17 @@ public class MessagingExceptionTest {
 
     @Test(expected = MessagingException.class)
     public void test_defaultInitialization() throws MessagingException {
-        final MessagingException e = new MessagingException("miaow");
-        assertEquals("miaow", e.getMessage());
+        final MessagingException e = new MessagingException("Some cause");
+        assertEquals("Some cause", e.getMessage());
         assertNull(e.getCause());
         throw e;
     }
 
     @Test(expected = MessagingException.class)
     public void test_causeInitialization() throws MessagingException {
-        final Throwable cause = new RuntimeException("i did it!");
-        final MessagingException e = new MessagingException("miaow", cause);
-        assertEquals("miaow", e.getMessage());
+        final Throwable cause = new RuntimeException("RuntimeException cause");
+        final MessagingException e = new MessagingException("Some cause", cause);
+        assertEquals("Some cause", e.getMessage());
         assertEquals(cause, e.getCause());
         throw e;
     }

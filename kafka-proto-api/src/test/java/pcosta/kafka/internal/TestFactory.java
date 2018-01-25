@@ -92,7 +92,7 @@ class TestFactory {
      * @param srcTopic the message src topic
      * @return the built KafkaMessage
      */
-    static Message getDefaultMessage(String srcTopic) {
+    static Message getDefaultMsg(String srcTopic) {
         return KafkaMessage.newBuilder()
                 .setTraceabilityId("TraceabilityId")
                 .setPayloadClass(TestMessage.class.getName())

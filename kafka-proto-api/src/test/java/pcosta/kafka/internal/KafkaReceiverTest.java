@@ -2,20 +2,24 @@ package pcosta.kafka.internal;
 
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.kafka.test.rule.KafkaEmbedded;
 import pcosta.kafka.core.TestProto.TestMessage;
+import pcosta.kafka.internal.MessageReceiver.MessageProcessor;
 import pcosta.kafka.internal.TestFactory.TestsMessageProcessor;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 
+import static java.lang.Thread.sleep;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static pcosta.kafka.internal.TestFactory.receiverProps;
 import static pcosta.kafka.internal.TestFactory.senderProps;
@@ -42,16 +46,16 @@ public class KafkaReceiverTest {
     // kafka sender registering wait time
     private static final int REGISTER_WAIT_TIME = 6000;
     private static final String DEFAULT_KEY = "Topic" + "|" + TestMessage.class.getName();
-    private static final String RECEIVER_TOPIC = "Topic2";
+    private static final String DST_TOPIC = "Topic2";
 
     // key and value deserializers
     private static final StringDeserializer KEY_DESERIALIZER = new StringDeserializer();
-    private static final ByteArrayDeserializer VALUE_DESERIALIZER = new ByteArrayDeserializer();
+    private static final ByteArrayDeserializer VAL_DESERIALIZER = new ByteArrayDeserializer();
 
     // object under testing
     private KafkaReceiver<String, byte[]> kafkaReceiver;
     // the test message processor
-    private MessageReceiver.MessageProcessor messageProcessor;
+    private MessageProcessor msgProcessor;
     //the default senders factory
     private DefaultKafkaProducerFactory<String, TestMessage> senderFactory;
     // the broker dynamic listening port
@@ -68,13 +72,13 @@ public class KafkaReceiverTest {
      * public KafkaEmbedded(int count, boolean controlledShutdown, int partitions, String... topics);
      */
     @ClassRule
-    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1, true, 1, RECEIVER_TOPIC);
+    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1, true, 1, DST_TOPIC);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         // wait until the broker is ready
         System.setProperty(PropertiesReader.CONFIGURATION_FILE_DIR, "src/test/resources");
-        embeddedKafka.waitUntilSynced(RECEIVER_TOPIC, 0);
+        embeddedKafka.waitUntilSynced(DST_TOPIC, 0);
         this.port = embeddedKafka.getKafkaServer(0).config().port().toString();
     }
 
@@ -89,24 +93,16 @@ public class KafkaReceiverTest {
         }
     }
 
-    @Ignore
     @Test
     public void sendSuccessfulMessage() throws ExecutionException, InterruptedException {
         // Prepare
         final CountDownLatch latch = new CountDownLatch(messagesToBeSent);
-        this.messageProcessor = new TestsMessageProcessor(RECEIVER_TOPIC, TestMessage.class, emptyList(), emptyList(), latch);
+        this.msgProcessor = new TestsMessageProcessor(DST_TOPIC, TestMessage.class, emptyList(), emptyList(), latch);
 
-        // create and start the kafka receiver
-        this.kafkaReceiver = new KafkaReceiver(
-                RECEIVER_TOPIC,
-                KEY_DESERIALIZER,
-                VALUE_DESERIALIZER,
-                messageProcessor,
-                PARTITION,
-                receiverProps(port));
-
+        // create and start the kafka receiver and Sender
+        this.kafkaReceiver = new KafkaReceiver(DST_TOPIC, KEY_DESERIALIZER, VAL_DESERIALIZER, msgProcessor, PARTITION, receiverProps(port));
         this.kafkaReceiver.start();
-        final KafkaTemplate<String, TestMessage> kafkaSender = createTemplate(RECEIVER_TOPIC);
+        final KafkaTemplate<String, TestMessage> kafkaSender = createTemplate(DST_TOPIC);
 
         // Call: send the messages to the broker
         for (int i = 0; i < messagesToBeSent; ++i) {
@@ -120,33 +116,25 @@ public class KafkaReceiverTest {
         kafkaReceiver.stop();
     }
 
-    @Ignore
     @Test
-    public void send_invalidKey() throws Exception {
+    public void send_unknown_Key_format() throws Exception {
         // Prepare
         final CountDownLatch latch = new CountDownLatch(messagesToBeSent);
         final CountDownLatch errorLatch = new CountDownLatch(messagesToBeSent);
-        this.messageProcessor = new TestsMessageProcessor(RECEIVER_TOPIC, TestMessage.class, emptyList(), emptyList(), latch, errorLatch);
+        this.msgProcessor = new TestsMessageProcessor(DST_TOPIC, TestMessage.class, emptyList(), emptyList(), latch, errorLatch);
 
-        // create and start the kafka receiver
-        this.kafkaReceiver = new KafkaReceiver(RECEIVER_TOPIC,
-                KEY_DESERIALIZER,
-                VALUE_DESERIALIZER,
-                messageProcessor,
-                PARTITION,
-                receiverProps(port));
-
+        // create and start the kafka receiver and Sender
+        this.kafkaReceiver = new KafkaReceiver(DST_TOPIC, KEY_DESERIALIZER, VAL_DESERIALIZER, msgProcessor, PARTITION, receiverProps(port));
         this.kafkaReceiver.start();
-        final KafkaTemplate<String, TestMessage> kafkaSender = createTemplate(RECEIVER_TOPIC);
+        final KafkaTemplate<String, TestMessage> kafkaSender = createTemplate(DST_TOPIC);
 
         // Call: send the messages to the broker
         for (int i = 0; i < messagesToBeSent; ++i) {
-            kafkaSender.sendDefault("InvalidKey", DEFAULT_MESSAGE).get();
+            kafkaSender.sendDefault("UnknownKey", DEFAULT_MESSAGE).get();
         }
 
         // Assert: message was received and the latch was counted down on msgListener #messagesToBeSent times
-        assertTrue(errorLatch.await(MESSAGE_TIMEOUT, SECONDS));
-        assertFalse(latch.await(1, SECONDS));
+        assertTrue(latch.await(1, SECONDS));
         kafkaReceiver.stop();
     }
 
@@ -157,9 +145,9 @@ public class KafkaReceiverTest {
      */
     private KafkaTemplate<String, TestMessage> createTemplate(String dstTopic) throws InterruptedException {
         this.senderFactory = new DefaultKafkaProducerFactory<>(senderProps(port));
-        KafkaTemplate<String, TestMessage> template = new KafkaTemplate<>(senderFactory, true);
+        final KafkaTemplate<String, TestMessage> template = new KafkaTemplate<>(senderFactory, true);
         template.setDefaultTopic(dstTopic);
-        Thread.sleep(REGISTER_WAIT_TIME);
+        sleep(REGISTER_WAIT_TIME);
         return template;
     }
 }

@@ -3,8 +3,7 @@ package pcosta.kafka.internal;
 import org.junit.Test;
 import pcosta.kafka.core.TestProto.TestMessage;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Pedro Costa
@@ -26,6 +25,7 @@ public class StringMessageKeyTest {
         final String generatedKey = stringMessageKey.generateKey();
 
         //Assert
+        assertEquals(stringMessageKey.getKey(), defaultTestTopic + "|" + messageName);
         assertEquals(stringMessageKey.getMessageType(), messageName);
         assertEquals(stringMessageKey.getSrcTopic(), defaultTestTopic);
         assertEquals(generatedKey, defaultTestTopic + "|" + messageName);
@@ -42,6 +42,7 @@ public class StringMessageKeyTest {
         stringMessageKey.deserializeKey(defaultTestTopic + "|" + messageName);
 
         //Assert
+        assertEquals(stringMessageKey.getKey(), defaultTestTopic + "|" + messageName);
         assertEquals(stringMessageKey.getMessageType(), messageName);
         assertEquals(stringMessageKey.getSrcTopic(), defaultTestTopic);
     }
@@ -49,20 +50,37 @@ public class StringMessageKeyTest {
     @Test
     @SuppressWarnings("unused")
     public void deserializeKey_strangeTopic() {
-        // Call
-        final StringMessageKey<String> stringMessageKey = new StringMessageKey<>("798Topic//&$|invalidKey");
+        // Prepare
+        final String strangeKey = "798Topic//&$|StrangeKey";
+        final StringMessageKey<String> stringMessageKey = new StringMessageKey<>(strangeKey);
+
+        //Call
+        stringMessageKey.deserializeKey(strangeKey);
+
+        //Assert
+        assertEquals(stringMessageKey.getKey(), strangeKey);
+        assertEquals(stringMessageKey.getMessageType(), "StrangeKey");
+        assertEquals(stringMessageKey.getSrcTopic(), "798Topic//&$");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    @SuppressWarnings("unused")
-    public void deserializeKey_invalidKey() throws Exception {
-        // Call
-        StringMessageKey<String> stringMessageKey = new StringMessageKey<>("invalidKey");
+    @Test
+    public void deserializeKey_invalidKey() {
+        // Prepare
+        final String unknownKey = "UnknownKey";
+        final StringMessageKey<String> stringMessageKey = new StringMessageKey<>(unknownKey);
+
+        //Call
+        stringMessageKey.deserializeKey(unknownKey);
+
+        //Assert
+        assertEquals(stringMessageKey.getKey(), unknownKey);
+        assertNull(stringMessageKey.getMessageType());
+        assertNull(stringMessageKey.getSrcTopic());
     }
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("unused")
-    public void deserializeKey_nullKey() throws Exception {
+    public void deserializeKey_nullKey() {
         // Call
         final StringMessageKey<String> stringMessageKey = new StringMessageKey<>(null);
     }

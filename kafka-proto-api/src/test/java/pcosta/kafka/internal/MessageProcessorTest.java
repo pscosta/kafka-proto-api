@@ -13,15 +13,17 @@ import pcosta.kafka.core.TestProto.TestMessage;
 import pcosta.kafka.internal.MessageReceiver.MessageProcessor;
 import pcosta.kafka.message.KafkaMessageProto.KafkaMessage;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static com.google.protobuf.ExtensionRegistry.getEmptyRegistry;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static pcosta.kafka.api.MessageListener.LATEST_OFFSET;
+import static pcosta.kafka.internal.TestFactory.SomeMessageRegistry.getExtensionRegistry;
 import static pcosta.kafka.internal.TestFactory.*;
 
 /**
@@ -36,8 +38,8 @@ public class MessageProcessorTest {
     private static final long DEFAULT_OFFSET = 1L;
 
     // the testing topics
-    private static final String RECEIVER_TOPIC = "Topic1";
-    private static final String SENDER_TOPIC = "Topic2";
+    private static final String RECEIVER_TOPIC = "ReceiverTopic";
+    private static final String SENDER_TOPIC = "SenderTopic";
 
     // the message keys
     private static final MessageKey DEFAULT_KEY = new StringMessageKey(SENDER_TOPIC + "|" + TestMessage.class.getName());
@@ -73,17 +75,15 @@ public class MessageProcessorTest {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
         final CountDownLatch errorLatch = new CountDownLatch(1);
-        final List<MessageListener> messageListeners = Collections.singletonList(new TestFactory.SomeMessageListener(latch));
-        final List<MessageFilter> messageFilters = Collections.emptyList();
+        final List<MessageListener> listeners = singletonList(new TestFactory.SomeMessageListener(latch));
+        final List<MessageFilter> filters = emptyList();
 
         //init the processor
-        this.messageProcessor = new MessageProcessor(
-                RECEIVER_TOPIC, LATEST_OFFSET, 0,
-                TestMessage.class, messageFilters, messageListeners, getEmptyRegistry(),
-                getErrorListener(errorLatch));
+        this.messageProcessor = new MessageProcessor(RECEIVER_TOPIC, LATEST_OFFSET, 0,
+                TestMessage.class, filters, listeners, getEmptyRegistry(), getErrorListener(errorLatch));
 
         //Call
-        messageProcessor.process(getDefaultMessage(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
+        messageProcessor.process(getDefaultMsg(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
 
         //Assert: the listener was called back
         assertTrue(latch.await(DEFAULT_TIMEOUT, SECONDS));
@@ -95,17 +95,15 @@ public class MessageProcessorTest {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
         final CountDownLatch errorLatch = new CountDownLatch(1);
-        final List<MessageListener> messageListeners = Collections.singletonList(new TestFactory.KafkaMessageListener(latch));
-        final List<MessageFilter> messageFilters = Collections.emptyList();
+        final List<MessageListener> listeners = singletonList(new TestFactory.KafkaMessageListener(latch));
+        final List<MessageFilter> filters = emptyList();
 
         //init the processor
-        this.messageProcessor = new MessageProcessor(
-                RECEIVER_TOPIC, LATEST_OFFSET, 0,
-                KafkaMessage.class, messageFilters, messageListeners, getEmptyRegistry(),
-                getErrorListener(errorLatch));
+        this.messageProcessor = new MessageProcessor(RECEIVER_TOPIC, LATEST_OFFSET, 0,
+                KafkaMessage.class, filters, listeners, getEmptyRegistry(), getErrorListener(errorLatch));
 
         //Call
-        messageProcessor.process(getDefaultMessage(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
+        messageProcessor.process(getDefaultMsg(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
 
         //Assert: the listener was called back
         assertTrue(latch.await(DEFAULT_TIMEOUT, SECONDS));
@@ -117,17 +115,15 @@ public class MessageProcessorTest {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
         final CountDownLatch errorLatch = new CountDownLatch(1);
-        final List<MessageListener> messageListeners = Collections.singletonList(new TestFactory.GenericMessageListener(latch));
-        final List<MessageFilter> messageFilters = Collections.emptyList();
+        final List<MessageListener> listeners = singletonList(new TestFactory.GenericMessageListener(latch));
+        final List<MessageFilter> filters = emptyList();
 
         //init the processor
-        this.messageProcessor = new MessageProcessor(
-                RECEIVER_TOPIC, LATEST_OFFSET, 0,
-                KafkaMessage.class, messageFilters, messageListeners, getEmptyRegistry(),
-                getErrorListener(errorLatch));
+        this.messageProcessor = new MessageProcessor(RECEIVER_TOPIC, LATEST_OFFSET, 0,
+                KafkaMessage.class, filters, listeners, getEmptyRegistry(), getErrorListener(errorLatch));
 
         //Call
-        messageProcessor.process(getDefaultMessage(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
+        messageProcessor.process(getDefaultMsg(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
 
         //Assert: the listener was called back
         assertTrue(latch.await(DEFAULT_TIMEOUT, SECONDS));
@@ -139,17 +135,15 @@ public class MessageProcessorTest {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
         final CountDownLatch errorLatch = new CountDownLatch(1);
-        final List<MessageListener> messageListeners = Collections.singletonList(new TestFactory.SomeMessageListener(latch));
-        final List<MessageFilter> messageFilters = Collections.singletonList(new TestFactory.SomeMessageFilter());
+        final List<MessageListener> listeners = singletonList(new TestFactory.SomeMessageListener(latch));
+        final List<MessageFilter> filters = singletonList(new TestFactory.SomeMessageFilter());
 
         //init the processor
-        this.messageProcessor = new MessageProcessor(
-                RECEIVER_TOPIC, LATEST_OFFSET, 0,
-                TestMessage.class, messageFilters, messageListeners, getEmptyRegistry(),
-                getErrorListener(errorLatch));
+        this.messageProcessor = new MessageProcessor(RECEIVER_TOPIC, LATEST_OFFSET, 0,
+                TestMessage.class, filters, listeners, getEmptyRegistry(), getErrorListener(errorLatch));
 
         //Call
-        messageProcessor.process(getDefaultMessage(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
+        messageProcessor.process(getDefaultMsg(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
 
         //Assert: the listener wasn't called back because the message was filtered
         assertFalse(latch.await(DEFAULT_TIMEOUT, SECONDS));
@@ -161,17 +155,15 @@ public class MessageProcessorTest {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
         final CountDownLatch errorLatch = new CountDownLatch(1);
-        final List<MessageListener> messageListeners = Collections.emptyList(); // no listeners for known messages
-        final List<MessageFilter> messageFilters = Collections.emptyList();
+        final List<MessageListener> listeners = emptyList(); // no listeners for known messages
+        final List<MessageFilter> filters = emptyList();
 
         //init the processor
-        this.messageProcessor = new MessageProcessor(
-                RECEIVER_TOPIC, LATEST_OFFSET, 0,
-                Object.class, messageFilters, messageListeners, getEmptyRegistry(),
-                getErrorListener(errorLatch));
+        this.messageProcessor = new MessageProcessor(RECEIVER_TOPIC, LATEST_OFFSET, 0,
+                Object.class, filters, listeners, getEmptyRegistry(), getErrorListener(errorLatch));
 
         //Call
-        messageProcessor.process(getDefaultMessage(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
+        messageProcessor.process(getDefaultMsg(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
 
         //Assert: the error listener was called back because the message type is unknown
         assertFalse(latch.await(DEFAULT_TIMEOUT, SECONDS));
@@ -184,14 +176,12 @@ public class MessageProcessorTest {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
         final CountDownLatch errorLatch = new CountDownLatch(1);
-        final List<MessageListener> listeners = Collections.singletonList(new TestFactory.SomeExtensionListener(latch));
-        final List<MessageFilter> filters = Collections.emptyList();
+        final List<MessageListener> listeners = singletonList(new TestFactory.SomeExtensionListener(latch));
+        final List<MessageFilter> filters = emptyList();
 
         //init the processor
-        this.messageProcessor = new MessageProcessor(
-                RECEIVER_TOPIC, LATEST_OFFSET, 0,
-                TestMessage.class, filters, listeners, TestFactory.SomeMessageRegistry.getExtensionRegistry(),
-                getErrorListener(errorLatch));
+        this.messageProcessor = new MessageProcessor(RECEIVER_TOPIC, LATEST_OFFSET, 0,
+                TestMessage.class, filters, listeners, getExtensionRegistry(), getErrorListener(errorLatch));
 
         //Call
         messageProcessor.process(getDefaultMessageWithExtension(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, DEFAULT_KEY, DEFAULT_OFFSET);
@@ -206,14 +196,12 @@ public class MessageProcessorTest {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
         final CountDownLatch errorLatch = new CountDownLatch(1);
-        final List<MessageListener> listeners = Collections.singletonList(new TestFactory.SomeMessageListener(latch));
-        final List<MessageFilter> filters = Collections.singletonList(new TestFactory.SomeMessageFilter());
+        final List<MessageListener> listeners = singletonList(new TestFactory.SomeMessageListener(latch));
+        final List<MessageFilter> filters = singletonList(new TestFactory.SomeMessageFilter());
 
         //init the processor
-        this.messageProcessor = new MessageProcessor(
-                RECEIVER_TOPIC, LATEST_OFFSET, 0,
-                TestMessage.class, filters, listeners, getEmptyRegistry(),
-                getErrorListener(errorLatch));
+        this.messageProcessor = new MessageProcessor(RECEIVER_TOPIC, LATEST_OFFSET, 0,
+                TestMessage.class, filters, listeners, getEmptyRegistry(), getErrorListener(errorLatch));
 
         //Call
         messageProcessor.process(getSomeOtherDefaultMessage(SENDER_TOPIC).toByteArray(), SENDER_TOPIC, UNKNOWN_TYPE_KEY, DEFAULT_OFFSET);
