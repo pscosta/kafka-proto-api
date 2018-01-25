@@ -29,11 +29,4 @@ public @interface EnableKafkaApiBootstrap {
      * @return {@code true} if the listeners bootstrap is to be done automatically, {@code false} otherwise.
      */
     boolean autoRegisterListeners() default true;
-
-    /**
-     * The application Topic identifier
-     *
-     * @return the application module Topic
-     */
-    String topic();
 }

@@ -1,6 +1,7 @@
-package pcosta.kafka.spring.annotation;
+package pcosta.kafka.spring.processor;
 
 import pcosta.kafka.api.PlatformErrorListener;
+import pcosta.kafka.spring.annotation.ErrorListener;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

@@ -3,6 +3,7 @@ package pcosta.kafka.spring.annotation;
 import pcosta.kafka.spring.ReceiverConfigurationProvider;
 import com.google.common.truth.Truth;
 import org.junit.Test;
+import pcosta.kafka.spring.processor.ListenerConfigurationProcessor;
 
 import static com.google.testing.compile.JavaFileObjects.forResource;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;

@@ -66,7 +66,6 @@ public class KafkaBeanFactoryTest {
         beans.put("dummy", mock(Object.class));
 
         final EnableKafkaApiBootstrap annotation = mock(EnableKafkaApiBootstrap.class);
-        when(annotation.topic()).thenReturn("ADMIN");
 
         final ListableBeanFactory beanFactory = mock(ListableBeanFactory.class);
         when(beanFactory.getBeansWithAnnotation(eq(EnableKafkaApiBootstrap.class))).thenReturn(beans);

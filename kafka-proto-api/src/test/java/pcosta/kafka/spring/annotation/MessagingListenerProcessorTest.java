@@ -5,6 +5,7 @@ import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.Parser;
 import org.junit.Test;
 import pcosta.kafka.api.MessageListener;
+import pcosta.kafka.spring.processor.MessagingListenerProcessor;
 
 import static com.google.testing.compile.JavaFileObjects.forResource;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
