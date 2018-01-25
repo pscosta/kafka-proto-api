@@ -9,7 +9,7 @@ import pcosta.kafka.spring.annotation.MessagingListenerProcessorTest;
  * @author Pedro Costa
  */
 @MessagingListener(topic = "", message = MessagingListenerProcessorTest.TestMessage.class)
-public class MessagingListener_Invalid_Metadata implements MessageListener<MessagingListenerProcessorTest.TestMessage> {
+public class MessagingListener_Empty_Topic implements MessageListener<MessagingListenerProcessorTest.TestMessage> {
 
     @Override
     public void onMessage(final MessageMetadata messageMetadata, final MessagingListenerProcessorTest.TestMessage message) {
