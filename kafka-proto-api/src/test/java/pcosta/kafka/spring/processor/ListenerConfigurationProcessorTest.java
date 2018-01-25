@@ -1,9 +1,9 @@
-package pcosta.kafka.spring.annotation;
+package pcosta.kafka.spring.processor;
 
-import pcosta.kafka.spring.ReceiverConfigurationProvider;
 import com.google.common.truth.Truth;
 import org.junit.Test;
-import pcosta.kafka.spring.processor.ListenerConfigurationProcessor;
+import pcosta.kafka.spring.ReceiverConfigurationProvider;
+import pcosta.kafka.spring.annotation.EnableListenerConfiguration;
 
 import static com.google.testing.compile.JavaFileObjects.forResource;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;

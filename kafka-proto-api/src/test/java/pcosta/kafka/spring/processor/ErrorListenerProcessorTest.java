@@ -1,9 +1,9 @@
-package pcosta.kafka.spring.annotation;
+package pcosta.kafka.spring.processor;
 
-import pcosta.kafka.api.PlatformErrorListener;
 import com.google.common.truth.Truth;
 import org.junit.Test;
-import pcosta.kafka.spring.processor.ErrorListenerProcessor;
+import pcosta.kafka.api.PlatformErrorListener;
+import pcosta.kafka.spring.annotation.ErrorListener;
 
 import static com.google.testing.compile.JavaFileObjects.forResource;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
