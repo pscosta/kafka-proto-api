@@ -21,6 +21,8 @@ public class StringMessageKey<KEY> implements MessageKey<KEY> {
     //delimiter for kafka keys: <topic name>|<fully qualified message name>
     private static final String KEY_DELIMITER = "|";
 
+    //the original message key String
+    private String messageKey;
     //the sender topic
     private String srcTopic;
     //the proto message type
@@ -32,9 +34,10 @@ public class StringMessageKey<KEY> implements MessageKey<KEY> {
      * @param srcTopic    the sender topic
      * @param messageType the proto message type
      */
-    public StringMessageKey(String srcTopic, String messageType) {
+    StringMessageKey(String srcTopic, String messageType) {
         this.messageType = messageType;
         this.srcTopic = srcTopic;
+        this.messageKey = generateKey();
     }
 
     /**
@@ -43,7 +46,7 @@ public class StringMessageKey<KEY> implements MessageKey<KEY> {
      * @param key the incoming message key to be deserialized
      * @throws IllegalArgumentException for errors during key deserializing process
      */
-    public StringMessageKey(KEY key) throws IllegalArgumentException {
+    StringMessageKey(KEY key) throws IllegalArgumentException {
         Objects.requireNonNull(key, "Received null message key");
         deserializeKey(key);
     }
@@ -56,10 +59,11 @@ public class StringMessageKey<KEY> implements MessageKey<KEY> {
     @Override
     public void deserializeKey(KEY key) throws IllegalArgumentException {
         final String[] keyElements = key.toString().split("\\|");
+        this.messageKey = key.toString();
 
         if (keyElements.length != 2) {
-            log.error("Malformed key: {}", key);
-            throw new IllegalArgumentException(String.format("Malformed key: %s ", key));
+            log.debug("unknown message key format: {}", key);
+            return;
         }
 
         this.srcTopic = keyElements[0];
@@ -72,5 +76,10 @@ public class StringMessageKey<KEY> implements MessageKey<KEY> {
 
     public String getMessageType() {
         return messageType;
+    }
+
+    @Override
+    public String getKey() {
+        return messageKey;
     }
 }

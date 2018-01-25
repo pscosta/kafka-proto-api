@@ -21,4 +21,11 @@ public interface MessageKey<KEY> {
      * @return the generated message key
      */
     String generateKey();
+
+    /**
+     * The received message key
+     *
+     * @return The received message key
+     */
+    String getKey();
 }
