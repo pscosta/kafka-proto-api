@@ -1,10 +1,10 @@
 package pcosta.kafka.internal;
 
-import pcosta.kafka.api.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import pcosta.kafka.api.*;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,8 +21,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
  */
 public class KafkaContextTest {
 
-    // default topic for tests
-    private static final String defaultTopic = "ADMIN";
     //Object under testing
     private KafkaContext context;
 
@@ -37,7 +35,7 @@ public class KafkaContextTest {
     public void setUp() {
         initMocks(this);
         // init out
-        this.context = new KafkaContext(defaultTopic);
+        this.context = new KafkaContext();
     }
 
     @Test

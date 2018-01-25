@@ -16,14 +16,14 @@ import static org.mockito.Mockito.*;
 public class MessagingLifecycleFacadeTest {
 
     // the bootstrap
-    private MessagingBootstrap bootstrap;
+    private KafkaApiBootstrap bootstrap;
 
     // the lifecycle facade
     private MessagingLifecycleFacade facade;
 
     @Before
     public void setup() {
-        bootstrap = mock(MessagingBootstrap.class);
+        bootstrap = mock(KafkaApiBootstrap.class);
         facade = new MessagingLifecycleFacade(bootstrap);
     }
 

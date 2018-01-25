@@ -2,7 +2,7 @@ package pcosta.kafka.spring;
 
 import pcosta.kafka.api.*;
 import pcosta.kafka.configuration.ReceiverConfigurationBuilder;
-import pcosta.kafka.spring.annotation.EnableMessagingBootstrap;
+import pcosta.kafka.spring.annotation.EnableKafkaApiBootstrap;
 import pcosta.kafka.spring.annotation.ErrorListener;
 import pcosta.kafka.spring.annotation.MessagingListener;
 import com.google.protobuf.GeneratedMessage;
@@ -23,21 +23,21 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit tests for the {@link MessagingBootstrap} class.
+ * Unit tests for the {@link KafkaApiBootstrap} class.
  *
  * @author Pedro Costa
  */
-public class MessagingBootstrapTest {
+public class KafkaApiBootstrapTest {
 
     private static final String TOPIC1 = "Topic1";
     private static final String TOPIC2 = "Topic2";
 
     // the bootstrap
-    private MessagingBootstrap bootstrap;
+    private KafkaApiBootstrap bootstrap;
 
     @Before
     public void setup() {
-        bootstrap = spy(new MessagingBootstrap() {
+        bootstrap = spy(new KafkaApiBootstrap() {
             @Override
             ReceiverConfigurationBuilder createReceiverConfigurationBuilder() {
                 return super.createReceiverConfigurationBuilder();
@@ -172,12 +172,12 @@ public class MessagingBootstrapTest {
      */
     private void setupApplicationContext(final ApplicationContext appContext, final MessagingContext msgContext,
                                          final boolean autoBootstrapListeners, final boolean useFilters) {
-        // enable the EnableMessagingBootstrap annotation
-        when(appContext.getBeansWithAnnotation(EnableMessagingBootstrap.class)).thenReturn(Collections.singletonMap("configuration", mock(Object.class)));
+        // enable the EnableKafkaApiBootstrap annotation
+        when(appContext.getBeansWithAnnotation(EnableKafkaApiBootstrap.class)).thenReturn(Collections.singletonMap("configuration", mock(Object.class)));
 
-        final EnableMessagingBootstrap enableMessagingBootstrap = mock(EnableMessagingBootstrap.class);
-        when(enableMessagingBootstrap.autoRegisterListeners()).thenReturn(autoBootstrapListeners);
-        when(appContext.findAnnotationOnBean("configuration", EnableMessagingBootstrap.class)).thenReturn(enableMessagingBootstrap);
+        final EnableKafkaApiBootstrap enableKafkaApiBootstrap = mock(EnableKafkaApiBootstrap.class);
+        when(enableKafkaApiBootstrap.autoRegisterListeners()).thenReturn(autoBootstrapListeners);
+        when(appContext.findAnnotationOnBean("configuration", EnableKafkaApiBootstrap.class)).thenReturn(enableKafkaApiBootstrap);
 
         // put the msg context in the app context
         when(appContext.getBean(KafkaBeanFactory.MESSAGING_CONTEXT)).thenReturn(msgContext);

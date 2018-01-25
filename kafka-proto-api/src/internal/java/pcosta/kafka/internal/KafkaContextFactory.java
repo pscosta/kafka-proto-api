@@ -12,10 +12,10 @@ import javax.inject.Singleton;
  * Implementation of the {@link MessagingFactory}.
  */
 @Singleton
-public class MessagingFactoryImpl implements MessagingFactory {
+public class KafkaContextFactory implements MessagingFactory {
 
     // the logger
-    private static final Logger log = LoggerFactory.getLogger(MessagingFactoryImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(KafkaContextFactory.class);
 
     //the singleton messaging context
     private KafkaContext kafkaContext;

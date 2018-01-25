@@ -13,9 +13,9 @@ import pcosta.kafka.api.MessageProducer;
 import pcosta.kafka.api.MessagingContext;
 import pcosta.kafka.api.MessagingException;
 import pcosta.kafka.api.MessagingFactory;
-import pcosta.kafka.internal.MessagingFactoryImpl;
+import pcosta.kafka.internal.KafkaContextFactory;
 import pcosta.kafka.internal.ProtobufSerializer;
-import pcosta.kafka.spring.annotation.EnableMessagingBootstrap;
+import pcosta.kafka.spring.annotation.EnableKafkaApiBootstrap;
 import pcosta.kafka.spring.annotation.ProtoKafkaSender;
 import pcosta.kafka.spring.annotation.StringKafkaSender;
 
@@ -36,9 +36,10 @@ public class KafkaBeanFactory {
 
     @Bean(name = MESSAGING_CONTEXT, destroyMethod = "shutdown")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public MessagingContext messagingContext(final MessagingFactory messagingFactory) throws MessagingException {
+    public MessagingContext messagingContext(final MessagingFactory messagingFactory, final ListableBeanFactory beanFactory) throws MessagingException {
         log.info("initializing Kafka API context");
         try {
+            sanityCheckEnableKafkaApiBootstrapAnnotation(beanFactory);
             final MessagingContext context = messagingFactory.createContext();
             log.info("Kafka API context initialized");
             return context;
@@ -65,41 +66,34 @@ public class KafkaBeanFactory {
     @Bean(name = "kafkaMessagingFactory")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     public MessagingFactory messagingFactory() {
-        return new MessagingFactoryImpl();
+        return new KafkaContextFactory();
     }
 
     @Bean(name = "kafkaMessagingBootstrap")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public MessagingBootstrap messagingBootstrap() {
-        return new MessagingBootstrap();
+    public KafkaApiBootstrap messagingBootstrap() {
+        return new KafkaApiBootstrap();
     }
 
     @Bean(name = "kafkaMessagingLifecycleFacade")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public MessagingLifecycleFacade messagingLifecycleFacade(final MessagingBootstrap messagingBootstrap) {
-        return new MessagingLifecycleFacade(messagingBootstrap);
+    public MessagingLifecycleFacade messagingLifecycleFacade(final KafkaApiBootstrap kafkaApiBootstrap) {
+        return new MessagingLifecycleFacade(kafkaApiBootstrap);
     }
 
     /**
-     * Returns the application {@code Topic} of the currently being deployed context
+     * Performs a sanity check, ensuring there's indeed one {@link EnableKafkaApiBootstrap} defined in the application's classpath
      *
      * @param beanFactory the bean factory for this context
-     * @return the application module {@code Topic}
      */
-    private String getTopic(final ListableBeanFactory beanFactory) {
-        // get all of the beans annotated with EnableMessagingBootstrap, only 1 must be present!
-        final Map<String, Object> beans = beanFactory.getBeansWithAnnotation(EnableMessagingBootstrap.class);
-
+    private void sanityCheckEnableKafkaApiBootstrapAnnotation(final ListableBeanFactory beanFactory) {
+        // get all of the beans annotated with EnableKafkaApiBootstrap, only 1 must be present!
+        final Map<String, Object> beans = beanFactory.getBeansWithAnnotation(EnableKafkaApiBootstrap.class);
         // validate the beans
         if (beans.size() != 1) {
             throw new IllegalStateException("unable to properly bootstrap Kafka API, expected one and only one "
-                    + "class annotated with " + EnableMessagingBootstrap.class.getSimpleName());
+                    + "class annotated with " + EnableKafkaApiBootstrap.class.getSimpleName());
         }
-
-        // get the bean
-        final Map.Entry<String, Object> bean = beans.entrySet().iterator().next();
-        // the extract the application topic
-        return beanFactory.findAnnotationOnBean(bean.getKey(), EnableMessagingBootstrap.class).topic();
     }
 
 }

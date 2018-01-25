@@ -16,9 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Responsible for serializing and sending protobuf messages to kafka broker
  */
 @SuppressWarnings("unchecked")
-final class MessageProducerImpl<M> implements MessageProducer<M> {
+final class ProtobufProducer<M> implements MessageProducer<M> {
 
-    private static final Logger log = LoggerFactory.getLogger(MessageProducerImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ProtobufProducer.class);
 
     // the message deserializer
     private final Serializer valueSerializer;
@@ -35,7 +35,7 @@ final class MessageProducerImpl<M> implements MessageProducer<M> {
      * @param keySerializer   the key deserializer
      * @param valueSerializer the message deserializer
      */
-    MessageProducerImpl(Serializer keySerializer, Serializer valueSerializer) {
+    ProtobufProducer(Serializer keySerializer, Serializer valueSerializer) {
         this(keySerializer, valueSerializer, Collections.emptyList());
     }
 
@@ -45,7 +45,7 @@ final class MessageProducerImpl<M> implements MessageProducer<M> {
      * @param keySerializer   the key deserializer
      * @param valueSerializer the message deserializer
      */
-    MessageProducerImpl(Serializer keySerializer, Serializer valueSerializer, Collection<MessageFilter> filters) {
+    ProtobufProducer(Serializer keySerializer, Serializer valueSerializer, Collection<MessageFilter> filters) {
         this.keySerializer = keySerializer;
         this.valueSerializer = valueSerializer;
         this.kafkaSenders = new ConcurrentHashMap<>();
@@ -68,7 +68,7 @@ final class MessageProducerImpl<M> implements MessageProducer<M> {
             Objects.requireNonNull(topic, "Invalid topic");
             // kafka sender lazy-instantiation for this topic
             if (null == kafkaSenders.get(topic)) {
-                synchronized (MessageProducerImpl.class) {
+                synchronized (ProtobufProducer.class) {
                     if (null == kafkaSenders.get(topic))
                         kafkaSenders.put(topic, new KafkaSender<>(topic, keySerializer, valueSerializer));
                 }

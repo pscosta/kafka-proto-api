@@ -7,14 +7,14 @@ import pcosta.kafka.api.MessagingException;
  *
  * @author Pedro Costa
  */
-public class MessagingBootstrapException extends MessagingException {
+public class KafkaApiBootstrapException extends MessagingException {
 
     /**
      * Constructs the exception with the specified error message
      *
      * @param message the error message
      */
-    public MessagingBootstrapException(final String message) {
+    public KafkaApiBootstrapException(final String message) {
         super(message);
     }
 }

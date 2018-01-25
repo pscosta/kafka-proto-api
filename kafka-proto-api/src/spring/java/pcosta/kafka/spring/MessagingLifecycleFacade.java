@@ -11,15 +11,15 @@ import org.springframework.context.ApplicationContext;
 public class MessagingLifecycleFacade {
 
     // the messaging bootstrap
-    private final MessagingBootstrap messagingBootstrap;
+    private final KafkaApiBootstrap kafkaApiBootstrap;
 
     /**
      * Default lifecycle constructor
      *
-     * @param messagingBootstrap the messaging bootstrap
+     * @param kafkaApiBootstrap the messaging bootstrap
      */
-    MessagingLifecycleFacade(final MessagingBootstrap messagingBootstrap) {
-        this.messagingBootstrap = messagingBootstrap;
+    MessagingLifecycleFacade(final KafkaApiBootstrap kafkaApiBootstrap) {
+        this.kafkaApiBootstrap = kafkaApiBootstrap;
     }
 
     /**
@@ -29,7 +29,7 @@ public class MessagingLifecycleFacade {
      * @throws MessagingException if any error occurs while creating the messaging receiver
      */
     public void start(final ApplicationContext applicationContext) throws MessagingException {
-        messagingBootstrap.start(applicationContext);
+        kafkaApiBootstrap.start(applicationContext);
     }
 
     /**
@@ -39,7 +39,7 @@ public class MessagingLifecycleFacade {
      * @throws MessagingException if any error occurs while shutting down the messaging receiver
      */
     public void stop(final ApplicationContext applicationContext) throws MessagingException {
-        messagingBootstrap.stopListeners(applicationContext);
+        kafkaApiBootstrap.stopListeners(applicationContext);
     }
 
 }

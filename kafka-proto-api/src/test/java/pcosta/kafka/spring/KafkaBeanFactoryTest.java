@@ -8,8 +8,8 @@ import org.springframework.beans.factory.ListableBeanFactory;
 import pcosta.kafka.api.MessagingContext;
 import pcosta.kafka.api.MessagingException;
 import pcosta.kafka.api.MessagingFactory;
-import pcosta.kafka.internal.MessagingFactoryImpl;
-import pcosta.kafka.spring.annotation.EnableMessagingBootstrap;
+import pcosta.kafka.internal.KafkaContextFactory;
+import pcosta.kafka.spring.annotation.EnableKafkaApiBootstrap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,19 +39,19 @@ public class KafkaBeanFactoryTest {
     public void test_messagingFactory() {
         final MessagingFactory messagingFactory = kafkaBeanFactory.messagingFactory();
         assertNotNull(messagingFactory);
-        assertEquals(MessagingFactoryImpl.class, messagingFactory.getClass());
+        assertEquals(KafkaContextFactory.class, messagingFactory.getClass());
     }
 
     @Test
     public void test_messagingBootstrap() {
-        final MessagingBootstrap messagingBootstrap = kafkaBeanFactory.messagingBootstrap();
-        assertNotNull(messagingBootstrap);
-        assertEquals(MessagingBootstrap.class, messagingBootstrap.getClass());
+        final KafkaApiBootstrap kafkaApiBootstrap = kafkaBeanFactory.messagingBootstrap();
+        assertNotNull(kafkaApiBootstrap);
+        assertEquals(KafkaApiBootstrap.class, kafkaApiBootstrap.getClass());
     }
 
     @Test
     public void test_messagingLifecycleFacade() {
-        final MessagingLifecycleFacade messagingLifecycleFacade = kafkaBeanFactory.messagingLifecycleFacade(mock(MessagingBootstrap.class));
+        final MessagingLifecycleFacade messagingLifecycleFacade = kafkaBeanFactory.messagingLifecycleFacade(mock(KafkaApiBootstrap.class));
         assertNotNull(messagingLifecycleFacade);
         assertEquals(MessagingLifecycleFacade.class, messagingLifecycleFacade.getClass());
     }
@@ -60,17 +60,17 @@ public class KafkaBeanFactoryTest {
     public void test_messagingContext() throws MessagingException {
         final MessagingContext context = mock(MessagingContext.class);
         final MessagingFactory factory = mock(MessagingFactory.class);
-        when(factory.createContext("ADMIN")).thenReturn(context);
+        when(factory.createContext()).thenReturn(context);
 
         final Map<String, Object> beans = new HashMap<>();
         beans.put("dummy", mock(Object.class));
 
-        final EnableMessagingBootstrap annotation = mock(EnableMessagingBootstrap.class);
+        final EnableKafkaApiBootstrap annotation = mock(EnableKafkaApiBootstrap.class);
         when(annotation.topic()).thenReturn("ADMIN");
 
         final ListableBeanFactory beanFactory = mock(ListableBeanFactory.class);
-        when(beanFactory.getBeansWithAnnotation(eq(EnableMessagingBootstrap.class))).thenReturn(beans);
-        when(beanFactory.findAnnotationOnBean(eq("dummy"), eq(EnableMessagingBootstrap.class))).thenReturn(annotation);
+        when(beanFactory.getBeansWithAnnotation(eq(EnableKafkaApiBootstrap.class))).thenReturn(beans);
+        when(beanFactory.findAnnotationOnBean(eq("dummy"), eq(EnableKafkaApiBootstrap.class))).thenReturn(annotation);
 
         assertEquals(context, kafkaBeanFactory.messagingContext(factory, beanFactory));
     }

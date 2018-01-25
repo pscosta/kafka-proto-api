@@ -20,20 +20,20 @@ import java.util.Map;
  * The messaging bootstrap that shall scan for the messaging configuration directives and apply then in the messaging
  * context of this application.
  * <p>
- * If any unexpected exception occurs, {@link MessagingBootstrapException} are thrown an the initialization is aborted.
+ * If any unexpected exception occurs, {@link KafkaApiBootstrapException} are thrown an the initialization is aborted.
  *
  * @author Pedro Costa
  */
-class MessagingBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+class KafkaApiBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(MessagingBootstrap.class);
+    private static final Logger log = LoggerFactory.getLogger(KafkaApiBootstrap.class);
 
     // the initialized flag
     volatile boolean initialized = false;
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
-        final EnableMessagingBootstrap annotation = getMessagingAnnotation(event.getApplicationContext());
+        final EnableKafkaApiBootstrap annotation = getMessagingAnnotation(event.getApplicationContext());
 
         //Init if not initialized already and autoRegisterListeners prop is active
         if (annotation != null && annotation.autoRegisterListeners() && !initialized) {
@@ -50,7 +50,7 @@ class MessagingBootstrap implements ApplicationListener<ContextRefreshedEvent> {
         try {
             if (!initialized) {
                 final EnableListenerConfiguration configAnnotation = getMessagingConfigurationAnnotation(context);
-                final EnableMessagingBootstrap annotation = getMessagingAnnotation(context);
+                final EnableKafkaApiBootstrap annotation = getMessagingAnnotation(context);
 
                 if (configAnnotation == null && annotation != null) {
                     setupListeners(context);
@@ -84,11 +84,11 @@ class MessagingBootstrap implements ApplicationListener<ContextRefreshedEvent> {
      * @param applicationContext the application context
      * @return the annotation definition or {@code null} if not found
      */
-    private EnableMessagingBootstrap getMessagingAnnotation(final ApplicationContext applicationContext) {
-        final Map<String, Object> beans = applicationContext.getBeansWithAnnotation(EnableMessagingBootstrap.class);
+    private EnableKafkaApiBootstrap getMessagingAnnotation(final ApplicationContext applicationContext) {
+        final Map<String, Object> beans = applicationContext.getBeansWithAnnotation(EnableKafkaApiBootstrap.class);
         if (beans.size() == 1) {
             final String key = beans.entrySet().iterator().next().getKey();
-            return applicationContext.findAnnotationOnBean(key, EnableMessagingBootstrap.class);
+            return applicationContext.findAnnotationOnBean(key, EnableKafkaApiBootstrap.class);
         }
         return null;
     }
@@ -162,16 +162,16 @@ class MessagingBootstrap implements ApplicationListener<ContextRefreshedEvent> {
      * @param builder the receiver configuration builder
      */
     @SuppressWarnings("unchecked")
-    private void createErrorListener(final ApplicationContext context, final ReceiverConfigurationBuilder builder) throws MessagingBootstrapException {
+    private void createErrorListener(final ApplicationContext context, final ReceiverConfigurationBuilder builder) throws KafkaApiBootstrapException {
         // get the beans annotated with the listener annotation
         final Map<String, Object> beans = context.getBeansWithAnnotation(ErrorListener.class);
         log.debug("found {} beans annotated with {}", beans.size(), ErrorListener.class);
 
         // only 1 listener is expected
         if (beans.isEmpty()) {
-            throw new MessagingBootstrapException("Unable to find an Error listener");
+            throw new KafkaApiBootstrapException("Unable to find an Error listener");
         } else if (beans.size() > 1) {
-            throw new MessagingBootstrapException("At the most only one bean must be defined with ErrorListener annotation");
+            throw new KafkaApiBootstrapException("At the most only one bean must be defined with ErrorListener annotation");
         }
 
         final Map.Entry<String, Object> beanEntry = beans.entrySet().iterator().next();
@@ -184,16 +184,16 @@ class MessagingBootstrap implements ApplicationListener<ContextRefreshedEvent> {
      *
      * @param context the application context
      */
-    private MessageReceiverConfiguration getReceiverConfiguration(final ApplicationContext context) throws MessagingBootstrapException {
+    private MessageReceiverConfiguration getReceiverConfiguration(final ApplicationContext context) throws KafkaApiBootstrapException {
         // get the beans annotated with the listener configuration annotation
         final Map<String, Object> beans = context.getBeansWithAnnotation(EnableListenerConfiguration.class);
         log.debug("found {} beans annotated with {}", beans.size(), EnableListenerConfiguration.class);
 
         // only 1 listener is expected
         if (beans.isEmpty()) {
-            throw new MessagingBootstrapException("Unable to find an EnableListenerConfiguration bean");
+            throw new KafkaApiBootstrapException("Unable to find an EnableListenerConfiguration bean");
         } else if (beans.size() > 1) {
-            throw new MessagingBootstrapException("At the most only one bean must be defined with EnableListenerConfiguration annotation");
+            throw new KafkaApiBootstrapException("At the most only one bean must be defined with EnableListenerConfiguration annotation");
         }
 
         final Map.Entry<String, Object> beanEntry = beans.entrySet().iterator().next();
@@ -208,7 +208,7 @@ class MessagingBootstrap implements ApplicationListener<ContextRefreshedEvent> {
      * @param builder the receiver configuration builder
      */
     @SuppressWarnings("unchecked")
-    private void createModuleAndPlatformListeners(final ApplicationContext context, final ReceiverConfigurationBuilder builder) throws MessagingBootstrapException {
+    private void createModuleAndPlatformListeners(final ApplicationContext context, final ReceiverConfigurationBuilder builder) throws KafkaApiBootstrapException {
         // get the beans annotated with the listener annotation
         final Map<String, Object> beans = context.getBeansWithAnnotation(MessagingListener.class);
         log.debug("found {} beans annotated with {}", beans.size(), MessagingListener.class);
@@ -225,7 +225,7 @@ class MessagingBootstrap implements ApplicationListener<ContextRefreshedEvent> {
                 type = (Class<? extends Message>) GenericTypeResolver.resolveTypeArgument(beanEntry.getValue().getClass(), MessageListener.class);
 
                 if (type == null) {
-                    throw new MessagingBootstrapException("Invalid listener definition: unable to determine the message " + "type for bean " + beanEntry.getKey());
+                    throw new KafkaApiBootstrapException("Invalid listener definition: unable to determine the message " + "type for bean " + beanEntry.getKey());
                 }
             } else {
                 type = configuration.message();

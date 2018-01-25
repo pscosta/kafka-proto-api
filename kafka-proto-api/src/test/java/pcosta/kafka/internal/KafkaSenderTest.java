@@ -77,7 +77,7 @@ public class KafkaSenderTest {
     public void send_success() throws Exception {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
-        this.kafkaSender = new KafkaSender<>(SENDER_TOPIC, RECEIVER_TOPIC, new StringSerializer(), new ByteArraySerializer(), senderProps(port));
+        this.kafkaSender = new KafkaSender<>(RECEIVER_TOPIC, new StringSerializer(), new ByteArraySerializer(), senderProps(port));
 
         //create and start the kafka receiver
         final KafkaReceiver receiver = this.createAndStartReceiver(latch);
@@ -98,7 +98,7 @@ public class KafkaSenderTest {
     public void send_to_invalid_topic() throws Exception {
         //Prepare
         final CountDownLatch latch = new CountDownLatch(1);
-        this.kafkaSender = new KafkaSender<>(SENDER_TOPIC, SENDER_TOPIC, new StringSerializer(), new ByteArraySerializer(), senderProps(port));
+        this.kafkaSender = new KafkaSender<>(SENDER_TOPIC, new StringSerializer(), new ByteArraySerializer(), senderProps(port));
 
         //create and start the kafka receiver
         final KafkaReceiver receiver = this.createAndStartReceiver(latch);

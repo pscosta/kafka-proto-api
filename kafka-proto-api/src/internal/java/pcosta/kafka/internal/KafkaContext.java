@@ -24,7 +24,7 @@ class KafkaContext implements MessagingContext {
     // the receiver reference
     private MessageReceiver receiver;
     // the producer reference
-    private Map<String, MessageProducerImpl> producers;
+    private Map<String, ProtobufProducer> producers;
 
     /**
      * Default context constructor.
@@ -54,8 +54,8 @@ class KafkaContext implements MessagingContext {
                                                  final Serializer keySerializer,
                                                  final Serializer valueSerializer) throws MessagingException {
 
-        final MessageProducerImpl<M> newProducer = new MessageProducerImpl<>(keySerializer, valueSerializer);
-        final MessageProducerImpl<M> oldProducer = producers.putIfAbsent(key, newProducer);
+        final ProtobufProducer<M> newProducer = new ProtobufProducer<>(keySerializer, valueSerializer);
+        final ProtobufProducer<M> oldProducer = producers.putIfAbsent(key, newProducer);
         if (Objects.isNull(oldProducer)) {
             return newProducer;
         } else {
@@ -69,8 +69,8 @@ class KafkaContext implements MessagingContext {
                                                  final Serializer valueSerializer,
                                                  final Collection<MessageFilter> filters) throws MessagingException {
 
-        final MessageProducerImpl<M> newProducer = new MessageProducerImpl<>(keySerializer, valueSerializer, filters);
-        final MessageProducerImpl<M> oldProducer = producers.putIfAbsent(key, newProducer);
+        final ProtobufProducer<M> newProducer = new ProtobufProducer<>(keySerializer, valueSerializer, filters);
+        final ProtobufProducer<M> oldProducer = producers.putIfAbsent(key, newProducer);
         if (Objects.isNull(oldProducer)) {
             return newProducer;
         } else {
