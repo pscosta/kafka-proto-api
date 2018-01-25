@@ -1,9 +1,9 @@
 package pcosta.kafka.internal;
 
-import pcosta.kafka.api.*;
 import org.apache.kafka.common.serialization.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pcosta.kafka.api.*;
 
 import java.util.Collection;
 import java.util.Map;
@@ -25,16 +25,11 @@ class KafkaContext implements MessagingContext {
     private MessageReceiver receiver;
     // the producer reference
     private Map<String, MessageProducerImpl> producers;
-    // the app topic
-    private String topic;
 
     /**
      * Default context constructor.
-     *
-     * @param topic this application source topic
      */
-    KafkaContext(String topic) {
-        this.topic = topic;
+    KafkaContext() {
         this.producers = new ConcurrentHashMap<>();
     }
 
@@ -59,7 +54,7 @@ class KafkaContext implements MessagingContext {
                                                  final Serializer keySerializer,
                                                  final Serializer valueSerializer) throws MessagingException {
 
-        final MessageProducerImpl<M> newProducer = new MessageProducerImpl<>(topic, keySerializer, valueSerializer);
+        final MessageProducerImpl<M> newProducer = new MessageProducerImpl<>(keySerializer, valueSerializer);
         final MessageProducerImpl<M> oldProducer = producers.putIfAbsent(key, newProducer);
         if (Objects.isNull(oldProducer)) {
             return newProducer;
@@ -74,7 +69,7 @@ class KafkaContext implements MessagingContext {
                                                  final Serializer valueSerializer,
                                                  final Collection<MessageFilter> filters) throws MessagingException {
 
-        final MessageProducerImpl<M> newProducer = new MessageProducerImpl<>(topic, keySerializer, valueSerializer, filters);
+        final MessageProducerImpl<M> newProducer = new MessageProducerImpl<>(keySerializer, valueSerializer, filters);
         final MessageProducerImpl<M> oldProducer = producers.putIfAbsent(key, newProducer);
         if (Objects.isNull(oldProducer)) {
             return newProducer;

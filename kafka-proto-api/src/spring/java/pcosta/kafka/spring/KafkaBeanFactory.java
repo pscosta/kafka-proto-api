@@ -36,10 +36,10 @@ public class KafkaBeanFactory {
 
     @Bean(name = MESSAGING_CONTEXT, destroyMethod = "shutdown")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public MessagingContext messagingContext(final MessagingFactory messagingFactory, final ListableBeanFactory beanFactory) throws MessagingException {
+    public MessagingContext messagingContext(final MessagingFactory messagingFactory) throws MessagingException {
         log.info("initializing Kafka API context");
         try {
-            final MessagingContext context = messagingFactory.createContext(getTopic(beanFactory));
+            final MessagingContext context = messagingFactory.createContext();
             log.info("Kafka API context initialized");
             return context;
         } catch (final MessagingException e) {

@@ -24,8 +24,6 @@ final class MessageProducerImpl<M> implements MessageProducer<M> {
     private final Serializer valueSerializer;
     // the key deserializer
     private final Serializer keySerializer;
-    // the source topic
-    private final String srcTopic;
     // the message filters
     private final Collection<MessageFilter> filters;
     // the kafka senders map by topic
@@ -37,8 +35,8 @@ final class MessageProducerImpl<M> implements MessageProducer<M> {
      * @param keySerializer   the key deserializer
      * @param valueSerializer the message deserializer
      */
-    MessageProducerImpl(String srcTopic, Serializer keySerializer, Serializer valueSerializer) {
-        this(srcTopic, keySerializer, valueSerializer, Collections.emptyList());
+    MessageProducerImpl(Serializer keySerializer, Serializer valueSerializer) {
+        this(keySerializer, valueSerializer, Collections.emptyList());
     }
 
     /**
@@ -47,8 +45,7 @@ final class MessageProducerImpl<M> implements MessageProducer<M> {
      * @param keySerializer   the key deserializer
      * @param valueSerializer the message deserializer
      */
-    MessageProducerImpl(String srcTopic, Serializer keySerializer, Serializer valueSerializer, Collection<MessageFilter> filters) {
-        this.srcTopic = srcTopic;
+    MessageProducerImpl(Serializer keySerializer, Serializer valueSerializer, Collection<MessageFilter> filters) {
         this.keySerializer = keySerializer;
         this.valueSerializer = valueSerializer;
         this.kafkaSenders = new ConcurrentHashMap<>();
@@ -73,7 +70,7 @@ final class MessageProducerImpl<M> implements MessageProducer<M> {
             if (null == kafkaSenders.get(topic)) {
                 synchronized (MessageProducerImpl.class) {
                     if (null == kafkaSenders.get(topic))
-                        kafkaSenders.put(topic, new KafkaSender<>(srcTopic, topic, keySerializer, valueSerializer));
+                        kafkaSenders.put(topic, new KafkaSender<>(topic, keySerializer, valueSerializer));
                 }
             }
         }
@@ -91,7 +88,7 @@ final class MessageProducerImpl<M> implements MessageProducer<M> {
         for (final String dstTopic : topics) {
             // generate the key for this message according with the defined conventions
             final Class<?> msgType = message.getClass();
-            final String msgKey = null != key ? key : new StringMessageKey(this.srcTopic, msgType.getName()).generateKey();
+            final String msgKey = null != key ? key : new StringMessageKey(dstTopic, msgType.getName()).generateKey();
 
             //check the pre-configured filters if the message is to be discarded
             if (!isFiltered(dstTopic, msgType)) {

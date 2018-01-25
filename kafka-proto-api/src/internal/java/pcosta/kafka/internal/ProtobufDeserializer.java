@@ -52,7 +52,7 @@ public class ProtobufDeserializer<M extends Message> {
      */
     public M parseFrom(Class<M> type, byte[] bytes) {
         try {
-            Message msg = (Message) type.getMethod("getDefaultInstance").invoke(null);
+            final Message msg = (Message) type.getMethod("getDefaultInstance").invoke(null);
             return (M) msg.newBuilderForType().mergeFrom(bytes).build();
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
@@ -69,8 +69,8 @@ public class ProtobufDeserializer<M extends Message> {
      */
     public M parseFrom(String typeName, byte[] bytes) {
         try {
-            Class<?> type = Class.forName(typeName);
-            Message msg = (Message) type.getMethod("getDefaultInstance").invoke(null);
+            final Class<?> type = Class.forName(typeName);
+            final Message msg = (Message) type.getMethod("getDefaultInstance").invoke(null);
             return (M) msg.newBuilderForType().mergeFrom(bytes).build();
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);

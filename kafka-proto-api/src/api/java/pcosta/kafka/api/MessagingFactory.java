@@ -11,9 +11,8 @@ public interface MessagingFactory {
     /**
      * Creates a kafka messaging context
      *
-     * @param topic this app source topic
      * @return the kafka context
      * @throws MessagingException if any error occurs while initializing the kafka context
      */
-    MessagingContext createContext(String topic) throws MessagingException;
+    MessagingContext createContext() throws MessagingException;
 }
