@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'idea'
+    id 'maven-publish'
+    id 'java-library-distribution'
+    id "com.google.protobuf" version "0.8.0"
+}
+
+group 'pcosta'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.google.protobuf:protobuf-java:3.1.0'
+}
+
+//Configure Jar archive and Manifest
+jar { exclude("**/*proto"); includeEmptyDirs = false }
+jar.manifest.attributes("Implementation-Title": project.name, "Implementation-Version": version)
+
+protobuf {
+    protoc {
+        // Download protoc executable from repo
+        artifact = 'com.google.protobuf:protoc:3.1.0'
+    }
+}
+
+//Configure Protobuf's sources to be generated
+sourceSets {
+    main {
+        proto { srcDir 'src/main/resources' }
+        resources { srcDir 'src/main/resources' }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+
+allprojects { sourceCompatibility = 1.8 }
