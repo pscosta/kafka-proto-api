@@ -48,6 +48,7 @@ sourceSets {
     }
     test {
         compileClasspath += testProto.output + api.output + spring.output + configuration.output + internal.output
+        runtimeClasspath += testProto.output + api.output + spring.runtimeClasspath + configuration.output + internal.output
         java.srcDirs 'build/generated'
         java.srcDir file('src/test/java')
         resources.srcDir file('src/test/resources')
