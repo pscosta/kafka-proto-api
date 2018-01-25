@@ -1,0 +1,17 @@
+option java_package = "pcosta.kafka.core";
+
+message TestMessage {
+    extensions 100 to 199;
+    required string text = 1;
+}
+
+message SomeExtension {
+    extend TestMessage {
+        optional SomeExtension element = 100;
+    }
+    optional string info = 1;
+}
+
+message SomeOtherTestMessage {
+    required string some_text = 1;
+}
