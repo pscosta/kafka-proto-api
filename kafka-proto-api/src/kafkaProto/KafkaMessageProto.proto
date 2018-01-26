@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "pcosta.kafka.message";
+
+import "google/protobuf/any.proto";
+
+message KafkaMessage {
+
+    string traceability_id = 1;
+    string origin_topic = 2;
+    string payload_class = 3;
+    google.protobuf.Any payload = 4;
+
+}
