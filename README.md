@@ -172,7 +172,7 @@ public class SomeMessageSender<M extends Message> {
     private MessageProducer<M> messageProducer;
 
     @Override
-    public void sendMessage(M message, String key, Topic... dstTopics) {
+    public void sendMessage(M message, String key, String... dstTopics) {
         messageProducer.send(message, key, dstTopics);
     }
 }
@@ -314,7 +314,7 @@ public class MessageProducerFactory<M extends Message> {
     }
 
     @Override
-    public void sendMessage(M message, String key, Topic... dstTopics) {
+    public void sendMessage(M message, String key, String... dstTopics) {
         messageProducer.send(message, key, dstTopics);
     }
 }
