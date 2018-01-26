@@ -1,6 +1,6 @@
 ### Kafka Protobuf Api
 
-Api for protobuf messages exchanging using a Kafka broker.
+API for protobuf messages exchanging using a Kafka broker and Spring.
 ```
 compile 'pcosta:kafka-proto-api:1.0.0'
 ```
@@ -12,6 +12,17 @@ Kafka configurations can also be easily tuned via properties file.
 *Kafka Protobuf Api* supports:
  - Protobuf: proto2 and proto3 syntax 
  - Kafka-clients: version 0.10.2.1
+
+----------
+
+### Checking out and Building
+To check out the project and build from source, do the following:
+
+```
+git clone git://github.com/pscosta/kafka-proto-api.git
+cd kafka-proto-api
+./gradlew build
+```
 
 ----------
 ## Bootstrap Kafka Api with Spring Framework
