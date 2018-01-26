@@ -1,4 +1,4 @@
-## Kafka Protobuf Api  [![Build Status](https://travis-ci.org/pscosta/kafka-proto-api.svg)](https://travis-ci.org/pscosta/kafka-proto-api/)
+# Kafka Protobuf Api  [![Build Status](https://travis-ci.org/pscosta/kafka-proto-api.svg)](https://travis-ci.org/pscosta/kafka-proto-api/)
 
 API for protobuf messages exchanging using a Kafka broker and Spring.
 ```
@@ -15,7 +15,7 @@ Kafka configurations can also be easily tuned via properties file.
 
 ----------
 
-### Checking out and Building
+## Checking out and Building
 To check out the project and build from source, do the following:
 
 ```
@@ -53,7 +53,7 @@ public class KafkaBootstrap {
 }
 ```
 
-### Message Listeners
+## Message Listeners
 
 Simply create beans with the `@MessagingListener` annotation:
 
@@ -159,7 +159,7 @@ public class KafkaApiBootstrap implements KafkaApi, ReceiverConfigurationProvide
 }
 ```
 
-### Send Messages
+## Send Messages
 
 To send protobuf messages to the desired destination topics, simply inject the `MessageProducer<M>` singleton bean and call the
 `send(M message, String key, Topic... topics)` method or just `send(M message, Topic... topics)` to use the default key:
@@ -202,7 +202,7 @@ public class SomeMessageSender<M extends Message> {
 }
  ```
 
-### Configuration Properties
+## Configuration Properties
 
 The following properties are enabled be default:
 
