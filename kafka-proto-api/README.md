@@ -192,15 +192,17 @@ public class SomeMessageSender<M extends Message> {
 ```
 
 > **Note:** the api also enables sending proto messages with the following:
- ```
+ 
+ ```java
+ public interface MessageProducer<M> {
+    
      /**
       * @param message        The message to be sent
       * @param key            The message key
       * @param traceabilityId The message traceability Identifier
       * @param topics         The destination topics where the message is to be placed
-      * @throws MessagingException if the message can't be sent to the underlying messaging service and topics.
       */
-     void send(M message, String key, String traceabilityId, final String... topics) throws MessagingException;
+     void send(M message, String key, String traceabilityId, final String... topics);
      
      /**
       * Sends the given {@code message} to the given {@code topics} with a default message Key:
@@ -208,9 +210,9 @@ public class SomeMessageSender<M extends Message> {
       *
       * @param message The message to be sent
       * @param topics  The destination topics where the message is to be placed
-      * @throws MessagingException if the message can't be sent to the underlying messaging service and topics.
       */
-     void send(M message, String... topics) throws MessagingException;
+     void send(M message, String... topics);
+}
  ```
 
 ### Configuration Properties
