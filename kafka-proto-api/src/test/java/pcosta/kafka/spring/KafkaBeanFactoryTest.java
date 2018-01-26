@@ -51,9 +51,9 @@ public class KafkaBeanFactoryTest {
 
     @Test
     public void test_messagingLifecycleFacade() {
-        final MessagingLifecycleFacade messagingLifecycleFacade = kafkaBeanFactory.messagingLifecycleFacade(mock(KafkaApiBootstrap.class));
-        assertNotNull(messagingLifecycleFacade);
-        assertEquals(MessagingLifecycleFacade.class, messagingLifecycleFacade.getClass());
+        final KafkaApiLifecycleFacade kafkaApiLifecycleFacade = kafkaBeanFactory.messagingLifecycleFacade(mock(KafkaApiBootstrap.class));
+        assertNotNull(kafkaApiLifecycleFacade);
+        assertEquals(KafkaApiLifecycleFacade.class, kafkaApiLifecycleFacade.getClass());
     }
 
     @Test

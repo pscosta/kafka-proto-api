@@ -24,4 +24,13 @@ public interface MessageProducer<M> {
      * @throws MessagingException if the message can't be sent to the underlying messaging service and topics.
      */
     void send(M message, String key, String... topics) throws MessagingException;
+
+    /**
+     * @param message        The message to be sent
+     * @param key            The message key
+     * @param traceabilityId The message traceability Identifier
+     * @param topics         The destination topics where the message is to be placed
+     * @throws MessagingException if the message can't be sent to the underlying messaging service and topics.
+     */
+    void send(M message, String key, String traceabilityId, final String... topics) throws MessagingException;
 }

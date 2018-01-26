@@ -32,7 +32,7 @@ final class PropertiesReader {
     // system property set by installer / program args
     public static final String CONFIGURATION_FILE_DIR = "config.file.dir";
     // the default kafka broker location
-    private static final String DEFAULT_BOOTSTRAP_SERVER = "localhost:12100";
+    private static final String DEFAULT_BOOTSTRAP_SERVER = "localhost:9092";
     // system property set by test infrastructure
     private static final String SPRING_EMBEDDED_KAFKA_BROKERS = "spring.embedded.kafka.brokers";
     // kafka receiver default auto-commit configuration

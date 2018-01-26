@@ -9,22 +9,22 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit tests for the {@link MessagingLifecycleFacade} class.
+ * Unit tests for the {@link KafkaApiLifecycleFacade} class.
  *
  * @author Pedro Costa
  */
-public class MessagingLifecycleFacadeTest {
+public class KafkaApiLifecycleFacadeTest {
 
     // the bootstrap
     private KafkaApiBootstrap bootstrap;
 
     // the lifecycle facade
-    private MessagingLifecycleFacade facade;
+    private KafkaApiLifecycleFacade facade;
 
     @Before
     public void setup() {
         bootstrap = mock(KafkaApiBootstrap.class);
-        facade = new MessagingLifecycleFacade(bootstrap);
+        facade = new KafkaApiLifecycleFacade(bootstrap);
     }
 
     @Test

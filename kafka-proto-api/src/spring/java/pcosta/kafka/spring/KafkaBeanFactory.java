@@ -17,7 +17,6 @@ import pcosta.kafka.internal.KafkaContextFactory;
 import pcosta.kafka.internal.ProtobufSerializer;
 import pcosta.kafka.spring.annotation.EnableKafkaApiBootstrap;
 import pcosta.kafka.spring.annotation.ProtoKafkaSender;
-import pcosta.kafka.spring.annotation.StringKafkaSender;
 
 import java.util.Map;
 
@@ -56,13 +55,6 @@ public class KafkaBeanFactory {
         return context.createProducer("string-proto", new StringSerializer(), new ProtobufSerializer());
     }
 
-    @StringKafkaSender
-    @Bean(name = "kafkaStringMessageProducer")
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public MessageProducer<String> stringMessageProducer(final MessagingContext context) throws MessagingException {
-        return context.createProducer("string-string", new StringSerializer(), new StringSerializer());
-    }
-
     @Bean(name = "kafkaMessagingFactory")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     public MessagingFactory messagingFactory() {
@@ -77,8 +69,8 @@ public class KafkaBeanFactory {
 
     @Bean(name = "kafkaMessagingLifecycleFacade")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public MessagingLifecycleFacade messagingLifecycleFacade(final KafkaApiBootstrap kafkaApiBootstrap) {
-        return new MessagingLifecycleFacade(kafkaApiBootstrap);
+    public KafkaApiLifecycleFacade messagingLifecycleFacade(final KafkaApiBootstrap kafkaApiBootstrap) {
+        return new KafkaApiLifecycleFacade(kafkaApiBootstrap);
     }
 
     /**

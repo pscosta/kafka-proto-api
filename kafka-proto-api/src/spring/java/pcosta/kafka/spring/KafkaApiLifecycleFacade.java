@@ -1,14 +1,14 @@
 package pcosta.kafka.spring;
 
-import pcosta.kafka.api.MessagingException;
 import org.springframework.context.ApplicationContext;
+import pcosta.kafka.api.MessagingException;
 
 /**
  * The messaging lifecycle facade for the start and stop of the Kafka API
  *
  * @author Pedro Costa
  */
-public class MessagingLifecycleFacade {
+public class KafkaApiLifecycleFacade {
 
     // the messaging bootstrap
     private final KafkaApiBootstrap kafkaApiBootstrap;
@@ -18,7 +18,7 @@ public class MessagingLifecycleFacade {
      *
      * @param kafkaApiBootstrap the messaging bootstrap
      */
-    MessagingLifecycleFacade(final KafkaApiBootstrap kafkaApiBootstrap) {
+    KafkaApiLifecycleFacade(final KafkaApiBootstrap kafkaApiBootstrap) {
         this.kafkaApiBootstrap = kafkaApiBootstrap;
     }
 

@@ -32,5 +32,4 @@ public class KafkaContextFactory implements MessagingFactory {
         }
         return kafkaContext;
     }
-
 }
