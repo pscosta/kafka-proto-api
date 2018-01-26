@@ -1,11 +1,14 @@
 package pcosta.kafka.internal;
 
+import com.google.protobuf.Any;
+import com.google.protobuf.Message;
 import org.apache.kafka.common.serialization.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pcosta.kafka.api.MessageFilter;
 import pcosta.kafka.api.MessageProducer;
 import pcosta.kafka.api.MessagingException;
+import pcosta.kafka.message.KafkaMessageProto.KafkaMessage;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,8 +63,12 @@ final class ProtobufProducer<M> implements MessageProducer<M> {
     @Override
     public void send(M message, String key, final String... topics) throws MessagingException {
         Objects.requireNonNull(topics, "Registered Invalid topics");
+        send(message, key, null, topics);
+    }
 
-        // transform message
+    @Override
+    public void send(M message, String key, String traceabilityId, final String... topics) throws MessagingException {
+        Objects.requireNonNull(topics, "Registered Invalid topics");
         log.debug("Transforming object {}", message);
 
         for (String topic : topics) {
@@ -90,9 +97,16 @@ final class ProtobufProducer<M> implements MessageProducer<M> {
             final Class<?> msgType = message.getClass();
             final String msgKey = null != key ? key : new StringMessageKey(dstTopic, msgType.getName()).generateKey();
 
+            // wrap the incoming proto message in the KafkaMessage
+            final KafkaMessage kafkaMsg = KafkaMessage.newBuilder()
+                    .setPayloadClass(message.getClass().getName())
+                    .setPayload(Any.pack((Message) message))
+                    .setTraceabilityId(traceabilityId == null ? "" : traceabilityId)
+                    .build();
+
             //check the pre-configured filters if the message is to be discarded
             if (!isFiltered(dstTopic, msgType)) {
-                kafkaSenders.get(dstTopic).send(msgKey, message);
+                kafkaSenders.get(dstTopic).send(msgKey, (M) kafkaMsg);
             }
         }
     }
