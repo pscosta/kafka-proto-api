@@ -1,4 +1,4 @@
-### Kafka Protobuf Api
+### Kafka Protobuf Api  [![Build Status](https://travis-ci.org/pscosta/kafka-proto-api.svg)](https://travis-ci.org/pscosta/kafka-proto-api/)
 
 API for protobuf messages exchanging using a Kafka broker and Spring.
 ```
