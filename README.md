@@ -32,9 +32,6 @@ Annotate a bean with the `@EnableKafkaApiBootstrap` annotation specifying the li
 or explicitly: `autoRegisterListeners = false`, only when the `messagingApiLifecycle.start(context)` method is called.
 
 ```java
-/**
- * Kafka Api Bootstrap on Spring
- */
 @Configuration
 @EnableKafkaApiBootstrap(autoRegisterListeners = false)
 public class KafkaBootstrap {
@@ -61,9 +58,6 @@ public class KafkaBootstrap {
 Simply create beans with the `@MessagingListener` annotation:
 
 ```java
-/**
- * Kafka listener for incoming {@code MyProtoMsg} proto messages
- */
 @Component
 @MessagingListener(topic = "SomeTopic", message = MyProtoMsg.class )
 public class MyProtoMsgListener implements MessageListener<MyProtoMsg> {
@@ -100,9 +94,6 @@ When parsing a protobuf message that might have extensions, an `ExtensionRegistr
 To do so, simply implement a `RegistrySupplier` for the relevant protobuf types and provide it as:  `extensionRegistry = SomeRegistrySupplier.class`
 
 ```java
-/**
- * Kafka listener for incoming {@code MyProtoMsg} proto messages
- */
 @Component
 @MessagingListener(message = MyProtoMsg.class, topic = "SomeTopic", extensionRegistry = SomeRegistrySupplier.class)
 public class MyProtoMsgListener implements MessageListener<MyProtoMsg> {
@@ -119,9 +110,6 @@ public class MyProtoMsgListener implements MessageListener<MyProtoMsg> {
 ```
 
 ```java
-/**
- * Supplier of Extension Registries for parsing extension fields of 'MyProtoMsg' protobuf types
- */
 public class SomeRegistrySupplier implements ExtensionRegistrySupplier {
 
     @Override
@@ -139,9 +127,6 @@ more "functional style" listener registration via `ReceiverConfigurationBuilder`
 Use the `.newListener(MessageListener<M> listener, Class<M> messageType, Topic... topics)` method to register new listeners:
 
 ```java
-/**
- * Handles Kafka API lifecycle
- */
 @Configuration
 @EnableKafkaApiBootstrap(autoRegisterListeners = false, topic = "SomeTopic")
 @EnableListenerConfiguration
@@ -180,18 +165,9 @@ To send protobuf messages to the desired destination topics, simply inject the `
 `send(M message, String key, Topic... topics)` method or just `send(M message, Topic... topics)` to use the default key:
 
 ```java
-import com.google.protobuf.Any;
-import com.google.protobuf.Message;
-
-/**
- * Kafka message sender implementation
- */
 @Service
 public class SomeMessageSender<M extends Message> {
 
-    /**
-     * The kafka api message producer
-     */
     @Autowired
     private MessageProducer<M> messageProducer;
 
@@ -231,9 +207,7 @@ public class SomeMessageSender<M extends Message> {
 The following properties are enabled be default:
 
 ```
-   /**
-    * The Kafka Consumer properties
-    */
+    // The Kafka Consumer properties
     props.put("bootstrap.servers", "localhost:9092");
     props.put("group.id", "myGroupId");
     props.put("client.id", <Consumer Topic Name>);
@@ -243,9 +217,7 @@ The following properties are enabled be default:
     props.put("key.deserializer", StringDeserializer.class);
     props.put("value.deserializer", ProtobufDeserializer.class);
 
-    /**
-     * The Kafka Sender properties
-     */
+    // The Kafka Sender properties
     props.put("bootstrap.servers", "localhost:9092");
     props.put("reconnect.backoff.ms", 3000);
     props.put("retry.backoff.ms", 3000);
@@ -276,7 +248,6 @@ define the property: `spring.embedded.kafka.brokers=localhost:9191` to override 
 ```
 
 
-
 ----------
 
 ## Other Dependency injection frameworks like CDI
@@ -287,17 +258,13 @@ Register the listeners using the `ReceiverConfigurationBuilder` and start them b
 ```java
 @Singleton
 public class ReceiverRegistry {
-    private static final Logger log = LogManager.getLogger();
 
     @Inject // the kafka messaging factory
     private final MessagingFactory messagingFactory;
-
     @Inject // some message handler
     private final SomeMessageHandler someHandler;
-
     // the kafka messaging context
     private MessagingContext context;
-
     // the kafka-api Receiver Configuration
     private MessageReceiverConfiguration receiverConfiguration;
 
@@ -331,14 +298,10 @@ Simply call the `createProducer()` method with `new StringSerializer(), new Prot
 // the serializers
 import pcosta.kafka.internal.ProtobufSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-
 // the relevant proto imports
 import com.google.protobuf.Any;
 import com.google.protobuf.Message;
 
-/**
- * The kafka message producer implementation
- */
 @Service
 public class MessageProducerFactory<M extends Message> {
 
