@@ -47,12 +47,10 @@ sourceSets {
         java.srcDir file('src/spring/java')
         resources.srcDir file('src/spring/resources')
     }
-    testProto {
-        proto { srcDir 'src/testProto' }
-    }
     test {
-        compileClasspath += testProto.output + api.output + spring.output + configuration.output + kafkaProto.output
-        runtimeClasspath += testProto.output + api.output + spring.runtimeClasspath + configuration.output + kafkaProto.output
+        compileClasspath += api.output + spring.output + configuration.output + kafkaProto.output
+        runtimeClasspath += api.output + spring.runtimeClasspath + configuration.output + kafkaProto.output
+        proto { srcDir 'src/test/resources/proto' }
         java.srcDirs 'build/generated'
         java.srcDir file('src/test/java')
         resources.srcDir file('src/test/resources')
@@ -66,7 +64,6 @@ dependencies {
     configurationCompile "com.google.protobuf:protobuf-java:$protoVersion"
     springCompile "com.google.protobuf:protobuf-java:$protoVersion"
     kafkaProtoCompile "com.google.protobuf:protobuf-java:$protoVersion"
-    testProtoCompile "com.google.protobuf:protobuf-java:$protoVersion"
     testCompile "com.google.protobuf:protobuf-java:$protoVersion"
 
     // Spring dependencies
