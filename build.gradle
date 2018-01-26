@@ -10,9 +10,7 @@ group 'pcosta'
 version '1.0-SNAPSHOT'
 
 ext {
-    springVersion = '1.2.' +
-            '' +
-            '3.RELEASE'
+    springVersion = '1.2.3.RELEASE'
     protoVersion = '3.1.0'
     kafkaMsgVersion = '1.0'
 }
