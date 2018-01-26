@@ -1,7 +1,7 @@
 .settings/
+build/
 target/
 .idea/
 *.iml
 out/
-build/
 .gradle/
