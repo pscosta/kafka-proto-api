@@ -3,10 +3,12 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'java-library-distribution'
+    id 'ru.vyarus.pom' version '1.2.0'
     id "com.google.protobuf" version "0.8.0"
 }
 
-group 'pcosta'
+description 'API for Protobuf exchanging using Kafka and Spring'
+group 'com.pscosta.kafka-proto-api'
 version '1.0-SNAPSHOT'
 
 ext {
@@ -63,6 +65,60 @@ dependencies {
     testCompile "org.springframework.kafka:spring-kafka-test:$springVersion"
 }
 
-//Configure Jar archive and Manifest
-jar.manifest.attributes("Implementation-Title": project.name, "Implementation-Version": version)
+task sourceJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allJava
+}
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+jar {
+    baseName = project.name
+    version = project.version
+    manifest { attributes("Implementation-Title": project.name, "Implementation-Version": version) }
+    exclude("**/*.proto")
+}
+artifacts {
+    archives sourceJar
+    archives javadocJar
+}
+
+pom {
+    licenses {
+        license {
+            name "The MIT License"
+            url "http://www.opensource.org/licenses/MIT"
+            distribution 'repo'
+        }
+    }
+    developers {
+        developer {
+            id 'pscosta'
+            name 'Pedro Costa'
+            email 'pedrosalvacaocosta@gmail.com'
+        }
+    }
+    scm {
+        url 'https://github.com/pscosta/kafka-proto-api'
+        connection 'scm:git:git://github.com/pscosta/kafka-proto-api.git'
+        developerConnection 'scm:git:ssh://github.com:pscosta/kafka-proto-api.git'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+        }
+    }
+    repositories {
+        maven {
+            url "http://some-nexus.com/nexus/content/repositories/releases"
+        }
+    }
+}
+
 allprojects { sourceCompatibility = 1.8 }
