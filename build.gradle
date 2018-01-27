@@ -8,7 +8,7 @@ plugins {
 }
 
 description 'API for Protobuf exchanging using Kafka and Spring'
-group 'com.pscosta.kafka-proto-api'
+group 'com.pscosta'
 version '1.0-SNAPSHOT'
 
 ext {
