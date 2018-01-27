@@ -228,23 +228,24 @@ The following properties are enabled be default:
     props.put("value.serializer", ProtobufSerializer.class);
 ```
 ## Override the default Kafka config properties 
-
-- Place a `kafka.properties` file in the application's classpath, and
+- The default Kafka broker location is `localhost:9091` 
+- To override the default configs, place a `kafka.properties` file in the application's classpath, and
 simplify use the `consumer.` prefix for kafka consumer properties and `sender.` prefix for kafka sender properties.
 - To change the Kafka broker location, simply override the consumer and sender `bootstrap.servers` properties or instead
-define the property: `spring.embedded.kafka.brokers=localhost:9191` to override both consumer and sender values.
+define the property: `spring.embedded.kafka.brokers=localhost:9091` to override both consumer and sender values.
 
 ```
     consumer.group.id=some_group_id
     consumer.enable.auto.commit=fasle
     consumer.consumer.timeout.ms=50
-    consumer.bootstrap.servers=localhost:9191
+    consumer.bootstrap.servers=localhost:1234
     ...
-    sender.bootstrap.servers=localhost:9191
+    sender.bootstrap.servers=localhost:1234
     sender.group.id=test_sender
     ...
     # instead of sender.bootstrap.servers / consumer.bootstrap.servers, use:
-    spring.embedded.kafka.brokers=localhost:9191
+    spring.embedded.kafka.brokers=localhost:1234
+    ...
 ```
 
 
