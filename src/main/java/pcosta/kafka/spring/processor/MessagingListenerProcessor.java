@@ -4,8 +4,8 @@ import pcosta.kafka.api.MessageListener;
 import com.google.protobuf.Message;
 import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Type;
-import pcosta.kafka.spring.annotation.DEFAULT_MESSAGE_TYPE;
-import pcosta.kafka.spring.annotation.MessagingListener;
+import pcosta.kafka.api.annotation.DEFAULT_MESSAGE_TYPE;
+import pcosta.kafka.api.annotation.MessagingListener;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

@@ -1,4 +1,4 @@
-package pcosta.kafka.spring.annotation;
+package pcosta.kafka.api.annotation;
 
 import pcosta.kafka.api.MessageListener;
 
@@ -8,8 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The messaging listener annotation for the platform messages, which shall defined a {@link MessageListener} for a
- * specific platform message being processed.
+ * The messaging listener annotation for the platform messages, which shall defined a {@link MessageListener}
+ * for a specific platform message being processed.
  *
  * @author Pedro Costa
  */

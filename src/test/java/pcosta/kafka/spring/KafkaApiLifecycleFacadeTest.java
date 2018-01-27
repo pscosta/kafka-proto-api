@@ -1,9 +1,9 @@
 package pcosta.kafka.spring;
 
-import pcosta.kafka.api.MessagingException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
+import pcosta.kafka.api.MessagingException;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;

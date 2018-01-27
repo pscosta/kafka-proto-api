@@ -1,7 +1,7 @@
 package processor;
 
 import pcosta.kafka.api.MessageMetadata;
-import pcosta.kafka.spring.annotation.MessagingListener;
+import pcosta.kafka.api.annotation.MessagingListener;
 import pcosta.kafka.spring.processor.MessagingListenerProcessorTest;
 
 /**

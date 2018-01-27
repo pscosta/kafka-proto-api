@@ -8,8 +8,8 @@ import org.springframework.beans.factory.ListableBeanFactory;
 import pcosta.kafka.api.MessagingContext;
 import pcosta.kafka.api.MessagingException;
 import pcosta.kafka.api.MessagingFactory;
+import pcosta.kafka.api.annotation.EnableKafkaApiBootstrap;
 import pcosta.kafka.internal.KafkaContextFactory;
-import pcosta.kafka.spring.annotation.EnableKafkaApiBootstrap;
 
 import java.util.HashMap;
 import java.util.Map;

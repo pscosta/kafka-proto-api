@@ -1,8 +1,8 @@
 package pcosta.kafka.configuration;
 
+import org.junit.Test;
 import pcosta.kafka.api.MessageListenerConfiguration;
 import pcosta.kafka.api.PlatformErrorListener;
-import org.junit.Test;
 
 import java.util.Collection;
 import java.util.Collections;

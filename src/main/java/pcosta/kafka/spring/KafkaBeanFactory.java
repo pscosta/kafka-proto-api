@@ -15,8 +15,8 @@ import pcosta.kafka.api.MessagingException;
 import pcosta.kafka.api.MessagingFactory;
 import pcosta.kafka.internal.KafkaContextFactory;
 import pcosta.kafka.internal.ProtobufSerializer;
-import pcosta.kafka.spring.annotation.EnableKafkaApiBootstrap;
-import pcosta.kafka.spring.annotation.ProtoKafkaSender;
+import pcosta.kafka.api.annotation.EnableKafkaApiBootstrap;
+import pcosta.kafka.api.annotation.ProtoKafkaSender;
 
 import java.util.Map;
 

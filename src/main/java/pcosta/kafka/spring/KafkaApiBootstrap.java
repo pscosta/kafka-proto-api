@@ -1,8 +1,5 @@
 package pcosta.kafka.spring;
 
-import pcosta.kafka.api.*;
-import pcosta.kafka.configuration.ReceiverConfigurationBuilder;
-import pcosta.kafka.spring.annotation.*;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.Message;
 import org.slf4j.Logger;
@@ -11,6 +8,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.GenericTypeResolver;
+import pcosta.kafka.api.*;
+import pcosta.kafka.api.annotation.*;
+import pcosta.kafka.configuration.ReceiverConfigurationBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;

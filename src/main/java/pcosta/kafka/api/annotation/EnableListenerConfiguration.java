@@ -1,4 +1,4 @@
-package pcosta.kafka.spring.annotation;
+package pcosta.kafka.api.annotation;
 
 import pcosta.kafka.api.MessageListener;
 import pcosta.kafka.api.MessageReceiverConfiguration;

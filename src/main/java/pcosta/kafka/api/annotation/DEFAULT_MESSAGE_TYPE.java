@@ -1,4 +1,4 @@
-package pcosta.kafka.spring.annotation;
+package pcosta.kafka.api.annotation;
 
 import com.google.protobuf.AbstractMessage;
 
@@ -10,5 +10,6 @@ import com.google.protobuf.AbstractMessage;
 public abstract class DEFAULT_MESSAGE_TYPE extends AbstractMessage {
 
     // private constructor, no initializations shall be made possible
-    private DEFAULT_MESSAGE_TYPE() {}
+    private DEFAULT_MESSAGE_TYPE() {
+    }
 }

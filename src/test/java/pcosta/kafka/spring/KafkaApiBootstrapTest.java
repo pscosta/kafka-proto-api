@@ -1,10 +1,5 @@
 package pcosta.kafka.spring;
 
-import pcosta.kafka.api.*;
-import pcosta.kafka.configuration.ReceiverConfigurationBuilder;
-import pcosta.kafka.spring.annotation.EnableKafkaApiBootstrap;
-import pcosta.kafka.spring.annotation.ErrorListener;
-import pcosta.kafka.spring.annotation.MessagingListener;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.Parser;
 import org.junit.Before;
@@ -12,6 +7,11 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
+import pcosta.kafka.api.*;
+import pcosta.kafka.api.annotation.EnableKafkaApiBootstrap;
+import pcosta.kafka.api.annotation.ErrorListener;
+import pcosta.kafka.api.annotation.MessagingListener;
+import pcosta.kafka.configuration.ReceiverConfigurationBuilder;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -173,11 +173,11 @@ public class KafkaApiBootstrapTest {
     private void setupApplicationContext(final ApplicationContext appContext, final MessagingContext msgContext,
                                          final boolean autoBootstrapListeners, final boolean useFilters) {
         // enable the EnableKafkaApiBootstrap annotation
-        when(appContext.getBeansWithAnnotation(EnableKafkaApiBootstrap.class)).thenReturn(Collections.singletonMap("configuration", mock(Object.class)));
+        when(appContext.getBeansWithAnnotation(EnableKafkaApiBootstrap.class)).thenReturn(Collections.singletonMap("pcosta/kafka/configuration", mock(Object.class)));
 
         final EnableKafkaApiBootstrap enableKafkaApiBootstrap = mock(EnableKafkaApiBootstrap.class);
         when(enableKafkaApiBootstrap.autoRegisterListeners()).thenReturn(autoBootstrapListeners);
-        when(appContext.findAnnotationOnBean("configuration", EnableKafkaApiBootstrap.class)).thenReturn(enableKafkaApiBootstrap);
+        when(appContext.findAnnotationOnBean("pcosta/kafka/configuration", EnableKafkaApiBootstrap.class)).thenReturn(enableKafkaApiBootstrap);
 
         // put the msg context in the app context
         when(appContext.getBean(KafkaBeanFactory.MESSAGING_CONTEXT)).thenReturn(msgContext);

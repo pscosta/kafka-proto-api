@@ -1,6 +1,9 @@
 package pcosta.kafka.configuration;
 
-import pcosta.kafka.api.*;
+import pcosta.kafka.api.MessageListener;
+import pcosta.kafka.api.MessageListenerConfiguration;
+import pcosta.kafka.api.MessageReceiverConfiguration;
+import pcosta.kafka.api.PlatformErrorListener;
 import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

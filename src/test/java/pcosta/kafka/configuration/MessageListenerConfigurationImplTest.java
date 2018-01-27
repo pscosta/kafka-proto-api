@@ -1,18 +1,18 @@
 package pcosta.kafka.configuration;
 
-import pcosta.kafka.api.MessageFilter;
-import pcosta.kafka.api.MessageListener;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.GeneratedMessage;
 import org.junit.Test;
+import pcosta.kafka.api.MessageFilter;
+import pcosta.kafka.api.MessageListener;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-import static pcosta.kafka.api.MessageListener.LATEST_OFFSET;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static pcosta.kafka.api.MessageListener.LATEST_OFFSET;
 
 /**
  * Unit tests for the {@link MessageListenerConfigurationImpl}.

@@ -1,4 +1,4 @@
-package pcosta.kafka.spring.annotation;
+package pcosta.kafka.api.annotation;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

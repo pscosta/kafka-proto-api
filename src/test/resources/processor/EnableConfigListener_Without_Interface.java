@@ -1,7 +1,7 @@
 package processor;
 
 import pcosta.kafka.api.MessageReceiverConfiguration;
-import pcosta.kafka.spring.annotation.EnableListenerConfiguration;
+import pcosta.kafka.api.annotation.EnableListenerConfiguration;
 
 /**
  * @author Pedro Costa

@@ -2,7 +2,7 @@ package pcosta.kafka.spring.processor;
 
 import pcosta.kafka.api.PlatformErrorListener;
 import pcosta.kafka.spring.ReceiverConfigurationProvider;
-import pcosta.kafka.spring.annotation.EnableListenerConfiguration;
+import pcosta.kafka.api.annotation.EnableListenerConfiguration;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

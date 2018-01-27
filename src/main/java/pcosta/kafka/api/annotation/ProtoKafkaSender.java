@@ -1,6 +1,7 @@
-package pcosta.kafka.spring.annotation;
+package pcosta.kafka.api.annotation;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import pcosta.kafka.api.MessageProducer;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,7 +11,8 @@ import static java.lang.annotation.ElementType.*;
 
 /**
  * @author Pedro Costa
- * Stereotype used to select a {@link pcosta.kafka.api.MessageProducer} for Protobuf type
+ * <p>
+ * Stereotype used to select a {@link MessageProducer} for Protobuf type
  */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)

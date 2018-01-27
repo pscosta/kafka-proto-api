@@ -3,7 +3,7 @@ package pcosta.kafka.spring.processor;
 import com.google.common.truth.Truth;
 import org.junit.Test;
 import pcosta.kafka.api.PlatformErrorListener;
-import pcosta.kafka.spring.annotation.ErrorListener;
+import pcosta.kafka.api.annotation.ErrorListener;
 
 import static com.google.testing.compile.JavaFileObjects.forResource;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;

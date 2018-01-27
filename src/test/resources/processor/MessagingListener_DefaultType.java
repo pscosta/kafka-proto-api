@@ -2,8 +2,8 @@ package processor;
 
 import pcosta.kafka.api.MessageListener;
 import pcosta.kafka.api.MessageMetadata;
-import pcosta.kafka.spring.annotation.DEFAULT_MESSAGE_TYPE;
-import pcosta.kafka.spring.annotation.MessagingListener;
+import pcosta.kafka.api.annotation.DEFAULT_MESSAGE_TYPE;
+import pcosta.kafka.api.annotation.MessagingListener;
 
 /**
  * @author Pedro Costa
