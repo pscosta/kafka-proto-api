@@ -293,7 +293,7 @@ public class ReceiverRegistry {
 
 ### Send Messages
 
-Simply call the `createProducer()` method with `new StringSerializer(), new ProtobufSerializer()` serializers and use the `send(M message, Topic... topics)` method to send messages to the desired topics:
+Simply call the `createProducer()` method with `new StringSerializer(), new ProtobufSerializer()` serializers and use the `send(M message, String key, String... topics)` method to send messages to the desired topics:
 
 ```java
 // the serializers
