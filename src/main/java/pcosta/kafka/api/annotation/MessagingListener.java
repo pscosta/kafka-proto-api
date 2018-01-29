@@ -1,10 +1,10 @@
 package pcosta.kafka.api.annotation;
 
+import com.google.protobuf.Message;
 import pcosta.kafka.api.MessageFilter;
 import pcosta.kafka.api.MessageListener;
 import pcosta.kafka.spring.DefaultExtensionRegistrySupplier;
 import pcosta.kafka.spring.ExtensionRegistrySupplier;
-import com.google.protobuf.Message;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -45,6 +45,8 @@ public @interface MessagingListener {
 
     /**
      * Defines the Supplier for the {@link com.google.protobuf.ExtensionRegistry} used to parse extension fields on this listener's message type
+     *
+     * @return the type of ExtensionRegistry
      */
     Class<? extends ExtensionRegistrySupplier> extensionRegistry() default DefaultExtensionRegistrySupplier.class;
 

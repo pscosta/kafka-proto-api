@@ -18,9 +18,10 @@ public class KafkaMetadata implements MessageMetadata {
     /**
      * The default constructor
      *
-     * @param srcTopic the incoming message origin topic
-     * @param key      the incoming message kafka key
-     * @param offset   the incoming message kafka offset
+     * @param srcTopic       the incoming message origin topic
+     * @param key            the incoming message kafka key
+     * @param offset         the incoming message kafka offset
+     * @param traceabilityId the incoming message traceability identifier
      */
     public KafkaMetadata(String srcTopic, MessageKey key, long offset, String traceabilityId) {
         this.srcTopic = srcTopic;
