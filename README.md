@@ -229,8 +229,9 @@ The following properties are enabled be default:
 ```
 ## Override the default Kafka config properties 
 - The default Kafka broker location is `localhost:9091` 
-- To override the default configs, place a `kafka.properties` file in the application's classpath, and
+- To override the default configs, place a `kafka.properties` file in the application's classpath (loaded with getResourceAsStream()), and
 simplify use the `consumer.` prefix for kafka consumer properties and `sender.` prefix for kafka sender properties.
+The System property `config.file.dir` can also be defined with a specific file location.
 - To change the Kafka broker location, simply override the consumer and sender `bootstrap.servers` properties or instead
 define the property: `spring.embedded.kafka.brokers=localhost:9091` to override both consumer and sender values.
 
