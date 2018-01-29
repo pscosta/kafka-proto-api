@@ -162,7 +162,7 @@ public class KafkaApiBootstrap implements KafkaApi, ReceiverConfigurationProvide
 ## Send Messages
 
 To send protobuf messages to the desired destination topics, simply inject the `MessageProducer<M>` singleton bean and call the
-`send(M message, String key, Topic... topics)` method or just `send(M message, Topic... topics)` to use the default key:
+`send(M message, String key, String... topics)` method or just `send(M message, String... topics)` to use the default key:
 
 ```java
 @Service
