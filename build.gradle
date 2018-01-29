@@ -8,8 +8,8 @@ plugins {
 }
 
 description 'API for Protobuf exchanging using Kafka and Spring'
-group 'com.pscosta'
-version '1.0-SNAPSHOT'
+group 'com.github.pscosta'
+version '1.0.0-SNAPSHOT'
 
 ext {
     springVersion = '1.2.3.RELEASE'

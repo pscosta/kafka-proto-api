@@ -2,7 +2,7 @@
 
 API for protobuf messages exchanging using a Kafka broker and Spring.
 ```
-compile 'com.pscosta:kafka-proto-api:1.0.0'
+compile 'com.github.pscosta:kafka-proto-api:1.0.0-SNAPSHOT'
 ```
 *Kafka Protobuf Api* purpose is to provide an easy way to exchange protobuf messages between Spring bean containers (or other dependency injection frameworks) 
 using a Kafka broker. The *Kafka Protobuf Api* integrates Spring framework, Protobuff and Kafka, making it easy and quick to send/receive proto messages.
