@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,7 +22,7 @@ public class PropertiesReaderTest {
     private PropertiesReader propertiesReader;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         System.setProperty(PropertiesReader.CONFIGURATION_FILE_DIR, "src/test/resources");
         this.propertiesReader = PropertiesReader.getInstance();
     }
@@ -34,7 +33,7 @@ public class PropertiesReaderTest {
     }
 
     @Test
-    public void loadConsumerPropsSuccessful() throws ExecutionException, InterruptedException {
+    public void loadConsumerPropsSuccessful() {
         //Prepare
         final Map<String, Object> consumerProps = propertiesReader.loadConsumerProps();
 
@@ -55,7 +54,7 @@ public class PropertiesReaderTest {
     }
 
     @Test
-    public void loadSenderPropsSuccessful() throws ExecutionException, InterruptedException {
+    public void loadSenderPropsSuccessful() {
         //Prepare
         final Map<String, Object> senderProps = propertiesReader.loadSenderProps();
 

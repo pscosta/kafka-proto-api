@@ -146,7 +146,9 @@ final class PropertiesReader {
      * @return the input stream
      */
     private InputStream getConfigurationStream() throws FileNotFoundException {
-        String path = System.getProperty(CONFIGURATION_FILE_DIR, "");
-        return new FileInputStream(path + (path.endsWith("/") ? "" : "/") + CONFIGURATION_FILE);
+        final String path = System.getProperty(CONFIGURATION_FILE_DIR);
+        if (null != path) {
+            return new FileInputStream(path + (path.endsWith("/") ? "" : "/") + CONFIGURATION_FILE);
+        } else return PropertiesReader.class.getClassLoader().getResourceAsStream(CONFIGURATION_FILE);
     }
 }
