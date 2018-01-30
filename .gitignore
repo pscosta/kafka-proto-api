@@ -5,3 +5,5 @@ target/
 *.iml
 out/
 .gradle/
+/gradle.properties
+/publishing.txt
