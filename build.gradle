@@ -1,15 +1,15 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'maven-publish'
+    id 'signing'
+    id 'maven'
     id 'java-library-distribution'
-    id 'ru.vyarus.pom' version '1.2.0'
     id "com.google.protobuf" version "0.8.0"
 }
 
 description 'API for Protobuf exchanging using Kafka and Spring'
 group 'com.github.pscosta'
-version '1.0.0-SNAPSHOT'
+version '1.0'
 
 ext {
     springVersion = '1.2.3.RELEASE'
@@ -83,40 +83,43 @@ artifacts {
     archives sourceJar
     archives javadocJar
 }
-
-pom {
-    licenses {
-        license {
-            name "The MIT License"
-            url "http://www.opensource.org/licenses/MIT"
-            distribution 'repo'
-        }
-    }
-    developers {
-        developer {
-            id 'pscosta'
-            name 'Pedro Costa'
-            email 'pedrosalvacaocosta@gmail.com'
-        }
-    }
-    scm {
-        url 'https://github.com/pscosta/kafka-proto-api'
-        connection 'scm:git:git://github.com/pscosta/kafka-proto-api.git'
-        developerConnection 'scm:git:ssh://github.com:pscosta/kafka-proto-api.git'
-    }
+signing {
+    sign configurations.archives
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact sourceJar
-            artifact javadocJar
-        }
-    }
+// OSSRH publication
+uploadArchives {
     repositories {
-        maven {
-            url "http://some-nexus.com/nexus/content/repositories/releases"
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                authentication(userName: 'user', password: 'pass')
+            }
+            pom.project {
+                name project.name
+                description project.description
+                packaging 'jar'
+                licenses {
+                    license {
+                        name "The MIT License"
+                        url "http://www.opensource.org/licenses/MIT"
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'pscosta'
+                        name 'Pedro Costa'
+                        email 'pedrosalvacaocosta@gmail.com'
+                    }
+                }
+                scm {
+                    url 'https://github.com/pscosta/kafka-proto-api'
+                    connection 'scm:git:git://github.com/pscosta/kafka-proto-api.git'
+                    developerConnection 'scm:git:ssh://github.com:pscosta/kafka-proto-api.git'
+                }
+                url 'https://github.com/pscosta/kafka-proto-api'
+            }
         }
     }
 }

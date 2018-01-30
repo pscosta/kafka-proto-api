@@ -1,9 +1,7 @@
 # Kafka Protobuf Api  [![Build Status](https://travis-ci.org/pscosta/kafka-proto-api.svg)](https://travis-ci.org/pscosta/kafka-proto-api/)
 
 API for protobuf messages exchanging using a Kafka broker and Spring.
-```
-compile 'com.github.pscosta:kafka-proto-api:1.0.0-SNAPSHOT'
-```
+
 *Kafka Protobuf Api* purpose is to provide an easy way to exchange protobuf messages between Spring bean containers (or other dependency injection frameworks) 
 using a Kafka broker. The *Kafka Protobuf Api* integrates Spring framework, Protobuff and Kafka, making it easy and quick to send/receive proto messages.
 It also abstracts the parsing and serializing of proto messages, as well as Kafka low-level API details.
@@ -12,6 +10,23 @@ Kafka configurations can also be easily tuned via properties file.
 *Kafka Protobuf Api* supports:
  - Protobuf: proto2 and proto3 syntax 
  - Kafka-clients: version 0.10.2.1
+
+----------
+
+Kafka Protobuf Api is available on [Maven Central](http://search.maven.org/#search).
+
+Gradle:
+```groovy
+compile 'com.github.pscosta:kafka-proto-api:1.0'
+```
+Maven:
+```xml
+<dependency>
+    <groupId>com.github.pscosta</groupId>
+    <artifactId>kafka-proto-api</artifactId>
+    <version>1.0</version>
+</dependency>
+```
 
 ----------
 
