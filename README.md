@@ -13,7 +13,7 @@ Kafka configurations can also be easily tuned via properties file.
 
 ----------
 
-Kafka Protobuf Api is available on [Maven Central](http://search.maven.org/#search).
+Kafka Protobuf Api is available on [Maven Central](http://search.maven.org/#search). Latest Release: 1.0
 
 Gradle:
 ```groovy
