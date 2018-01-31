@@ -1,9 +1,9 @@
 package pcosta.kafka.spring.processor;
 
-import pcosta.kafka.api.MessageListener;
 import com.google.protobuf.Message;
 import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Type;
+import pcosta.kafka.api.MessageListener;
 import pcosta.kafka.api.annotation.DEFAULT_MESSAGE_TYPE;
 import pcosta.kafka.api.annotation.MessagingListener;
 
@@ -16,7 +16,12 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static java.util.Arrays.asList;
 
 /**
  * The compile time processor for the {@link MessagingListener} annotation.
@@ -166,7 +171,7 @@ public class MessagingListenerProcessor extends AbstractProcessor {
      * @return {@code true} if the configuration is valid, {@code false} otherwise.
      */
     private boolean areTopicsValid(final String... topics) {
-        return topics != null && new HashSet<>(Arrays.asList(topics)).size() == Arrays.asList(topics).size();
+        return topics != null && new HashSet<>(asList(topics)).size() == asList(topics).size();
     }
 
     /**
