@@ -87,7 +87,7 @@ class MessageReceiver {
      * Stop the message processors and its kafka receivers
      */
     final void close() {
-        log.info("Stopping all kafka listenersMap..");
+        log.info("Stopping all kafka listeners..");
         processors.forEach((topic, messageProcessor) -> messageProcessor.stopReceiver());
     }
 
