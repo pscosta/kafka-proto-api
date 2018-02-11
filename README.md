@@ -139,7 +139,7 @@ public class SomeRegistrySupplier implements ExtensionRegistrySupplier {
 
 Instead of the `@MessagingListener` annotation, there's also the ability to use `@EnableListenerConfiguration` annotation that enables 
 more "functional style" listener registration via `ReceiverConfigurationBuilder`.
-Use the `.newListener(MessageListener<M> listener, Class<M> messageType, Topic... topics)` method to register new listeners:
+Use the `.newListener(MessageListener<M> listener, Class<M> messageType, String... topics)` method to register new listeners:
 
 ```java
 @Configuration
